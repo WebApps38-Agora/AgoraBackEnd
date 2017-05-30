@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 
 from topics.models import Article, Paper, Topic
+import newsapi
 
 
 class ArticleTest(TestCase):
@@ -47,3 +48,10 @@ class APITest(TestCase):
                     '/{}/1/'.format(entry_point), {}
                 ).status_code == 403
             )
+
+
+class NewsApiTest(TestCase):
+
+    def news_api_returns_some_sources(self):
+        sources = newsapi.get_sources()
+        self.assertGreater(len(sources), 1)
