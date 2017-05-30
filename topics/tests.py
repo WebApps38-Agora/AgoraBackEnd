@@ -6,7 +6,6 @@ from topics.models import Article, Source, Topic
 import topics.newsapi as newsapi
 import topics.semantic as semantic
 
-
 class ArticleTest(TestCase):
 
     def setUp(self):
