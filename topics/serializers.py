@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Article, Paper, Topic
+from topics.models import Article, Paper, Topic
 
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
