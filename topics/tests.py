@@ -1,4 +1,6 @@
 from django.test import TestCase
+from rest_framework.test import APIClient
+
 from topics.models import Article, Paper, Topic
 
 
@@ -20,3 +22,28 @@ class ArticleTest(TestCase):
 
         self.a1.topics.add(t1)
         self.a1.topics.add(t2)
+
+
+class APITest(TestCase):
+
+    entry_points = ["articles", "papers", "topics"]
+
+    def test_user_cannot_do_unsafe_requests(self):
+        userclient = APIClient()
+
+        for entry_point in self.entry_points:
+            assert(
+                userclient.delete(
+                    '/{}/1/'.format(entry_point)
+                ).status_code == 403
+            )
+            assert(
+                userclient.post(
+                    '/{}/'.format(entry_point), {}
+                ).status_code == 403
+            )
+            assert(
+                userclient.patch(
+                    '/{}/1/'.format(entry_point), {}
+                ).status_code == 403
+            )
