@@ -14,7 +14,6 @@ class Source(models.Model):
     A news outlet. Can be used to collect metrics and group articles.
     """
     id = models.CharField(primary_key=True, max_length=30)
-
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=200)
 
