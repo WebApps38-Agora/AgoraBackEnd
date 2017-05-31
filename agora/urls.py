@@ -6,7 +6,7 @@ from topics import views as topic_views
 
 router = routers.DefaultRouter()
 router.register(r'articles', topic_views.ArticleViewSet)
-router.register(r'papers', topic_views.PaperViewSet)
+router.register(r'papers', topic_views.SourceViewSet)
 router.register(r'topics', topic_views.TopicViewSet)
 router.register(r'reactions', metric_views.ReactionViewset)
 

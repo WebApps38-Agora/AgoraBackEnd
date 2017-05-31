@@ -13,12 +13,15 @@ class Source(models.Model):
     """
     A news outlet. Can be used to collect metrics and group articles.
     """
-    id = models.CharField(max_length=30)
+    id = models.CharField(primary_key=True, max_length=30)
+
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=200)
 
 
 class Article(models.Model):
+    url = models.URLField(primary_key=True)
+
     headline = models.CharField(max_length=140)
     description = models.CharField(max_length=1000, blank=True)
     content = models.TextField()
@@ -27,7 +30,7 @@ class Article(models.Model):
     url_image = models.URLField()
 
     topics = models.ManyToManyField(Topic)
-    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    source = models.ForeignKey(Source, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         self.content_len = len(self.content)

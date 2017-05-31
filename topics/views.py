@@ -1,6 +1,6 @@
 from rest_framework import permissions, viewsets
-from topics.models import Article, Paper, Topic
-from topics.serializers import (ArticleSerializer, PaperSerializer,
+from topics.models import Article, Source, Topic
+from topics.serializers import (ArticleSerializer, SourceSerializer,
                                 TopicSerializer)
 
 
@@ -25,12 +25,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
     permission_classes = (TopicsAppPermission,)
 
 
-class PaperViewSet(viewsets.ModelViewSet):
+class SourceViewSet(viewsets.ModelViewSet):
     """
-    API endpoint for paper
+    API endpoint for sources
     """
-    queryset = Paper.objects.all()
-    serializer_class = PaperSerializer
+    queryset = Source.objects.all()
+    serializer_class = SourceSerializer
     permission_classes = (TopicsAppPermission,)
 
 

@@ -6,7 +6,10 @@ NEWS_API_KEY = os.environ['NEWS_API_KEY']
 NEWS_API_ARTICLES = 'https://newsapi.org/v1/articles'
 NEWS_API_SOURCES = 'https://newsapi.org/v1/sources'
 
-def get_newest_articles(source, sort_by='latest'):
+class NewsApiError(Exception):
+    pass
+
+def get_newest_articles(source, sort_by='top'):
     '''Returns a list of the latest articles for a given source.
 
     The source argument is an identifier string such as 'bbc-news'.
@@ -18,12 +21,17 @@ def get_newest_articles(source, sort_by='latest'):
 
     params = {
         'source': source,
-        'sortBy': sortBy,
+        'sortBy': sort_by,
         'apiKey': NEWS_API_KEY
     }
 
     response = requests.get(NEWS_API_ARTICLES, params=params).json()
-    return response['articles'] if response['status'] == 'ok' else []
+    if response['status'] == 'ok':
+        return response['articles']
+    else:
+        raise NewsApiError('Could not fetch articles for source {}, have you '
+                           'set the NEWS_API_KEY environment variable?'.format(source))
+
 
 
 def get_all_sources(language='en'):
@@ -38,19 +46,19 @@ def get_all_sources(language='en'):
     return response.json()['sources']
 
 
-def update_article_database():
+def update_article_database(sources):
     '''Queries the News API for latest articles, discovering new ones and adding
     them to the database.'''
 
-    for source in get_all_sources():
-        s, _ = Paper.objects.get_or_create(id=source['id'])
+    for source in sources:
+        s, _ = Source.objects.get_or_create(id=source)
         articles = get_newest_articles(s.id)
 
         for article in articles:
             a, _ = Article.objects.get_or_create(
                             url=article['url'],
                             defaults={'headline': article['title'],
-                                      'description': article['description']),
+                                      'description': article['description'],
                                       'url_image': article['urlToImage'],
-                                      'paper': s})
+                                      'source': s})
             a.save()
