@@ -9,11 +9,13 @@ class Topic(models.Model):
     date = models.DateField(auto_now_add=True)
 
 
-class Paper(models.Model):
+class Source(models.Model):
     """
-    A newspaper. Can be used to collect metrics and group articles.
+    A news outlet. Can be used to collect metrics and group articles.
     """
+    id = models.CharField(max_length=30)
     name = models.CharField(max_length=30)
+    description = models.CharField(max_length=200)
 
 
 class Article(models.Model):
@@ -22,6 +24,7 @@ class Article(models.Model):
     content = models.TextField()
     content_len = models.PositiveIntegerField()
     url = models.URLField()
+    url_image = models.URLField()
 
     topics = models.ManyToManyField(Topic)
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
