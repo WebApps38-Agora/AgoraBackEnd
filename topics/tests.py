@@ -63,3 +63,12 @@ class NewsApiTest(TestCase):
     def test_new_articles_populate_database(self):
         self.assertEqual(len(Article.objects.all()), 0)
         newsapi.update_article_database(['bbc-news'])
+        self.assertGreater(len(Article.objects.all()), 0)
+
+    def test_old_articles_do_not_get_added(self):
+        newsapi.update_article_database(['bbc-news'])
+        previous = len(Article.objects.all())
+
+        newsapi.update_article_database(['bbc-news'])
+        new = len(Article.objects.all())
+        self.assertEqual(previous, new)
