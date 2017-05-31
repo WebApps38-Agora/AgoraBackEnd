@@ -19,8 +19,6 @@ class Source(models.Model):
 
 
 class Article(models.Model):
-    url = models.URLField()
-
     headline = models.CharField(max_length=140)
     description = models.CharField(max_length=1000, blank=True)
     content = models.TextField()
