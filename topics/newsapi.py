@@ -1,6 +1,6 @@
 import requests
 import os
-from topics.models import Article
+from topics.models import Article, Source
 
 NEWS_API_KEY = os.environ['NEWS_API_KEY']
 NEWS_API_ARTICLES = 'https://newsapi.org/v1/articles'
@@ -47,9 +47,10 @@ def update_article_database():
         articles = get_newest_articles(s.id)
 
         for article in articles:
-            a = Article(headline=article['title'],
-                        description=article['description']),
-                        url=article['url'],
-                        url_image=article['urlToImage'],
-                        paper=s)
+            a, _ = Article.objects.get_or_create(
+                            url=article['url'],
+                            defaults={'headline': article['title'],
+                                      'description': article['description']),
+                                      'url_image': article['urlToImage'],
+                                      'paper': s})
             a.save()
