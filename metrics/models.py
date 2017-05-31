@@ -22,7 +22,7 @@ class Metric(models.Model):
     )
 
     reaction = models.IntegerField(choices=REACTION_CHOICES)
-    comment = models.CharField(max_length=140)
+    comment = models.CharField(max_length=140, blank=True)
 
     def save(self, *args, **kwargs):
         """
