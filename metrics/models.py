@@ -52,4 +52,4 @@ class Metric(models.Model):
                 "Cannot add the same reaction twice to the same text"
             )
 
-        return super().save(args, kwargs)
+        return super().save(*args, **kwargs)
