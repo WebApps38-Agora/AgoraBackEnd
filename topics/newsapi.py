@@ -44,12 +44,21 @@ def get_sources(language='en'):
     return response.json()['sources']
 
 
-def update_article_database(sources):
+def update_article_database(allowed_source_ids):
     '''Queries the News API for latest articles, discovering new ones and adding
     them to the database.'''
 
-    for source in sources:
-        s, _ = Source.objects.get_or_create(id=source)
+    news_sources = get_all_sources()
+
+    for source in news_sources:
+        if source['id'] not in allowed_source_ids:
+            continue
+
+        s, _ = Source.objects.get_or_create(id=source['id'],
+                                            name=source['name'],
+                                            url=source['url'],
+                                            description=source['description'],
+                                            url_logo=get_source_logo(source['url']))
         articles = get_newest_articles(s.id)
 
         for article in articles:
@@ -59,3 +68,7 @@ def update_article_database(sources):
                                       'description': article['description'],
                                       'url_image': article['urlToImage'],
                                       'source': s})
+
+
+def get_source_logo(url):
+    return 'https://icons.better-idea.org/icon?url={}&size=70..120..200'.format(url)

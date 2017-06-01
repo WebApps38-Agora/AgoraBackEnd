@@ -5,7 +5,6 @@ class Topic(models.Model):
     """
     Definition of a news Topic.
     """
-    title = models.CharField(max_length=140)
     date = models.DateField(auto_now_add=True)
 
 
@@ -16,6 +15,8 @@ class Source(models.Model):
     id = models.CharField(primary_key=True, max_length=30)
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=200)
+    url = models.URLField()
+    url_logo = models.URLField()
 
 
 class Article(models.Model):
