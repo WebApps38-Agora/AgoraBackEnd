@@ -4,17 +4,17 @@ from rest_framework.serializers import ValidationError
 
 from metrics.models import Reaction
 from metrics.serializers import ReactionSerializer
-from topics.models import Article, Paper, Topic
+from topics.models import Article, Source, Topic
 
 
 class ReactionSerializerTest(TestCase):
 
     def setUp(self):
-        p = Paper(name="Test Paper")
+        p = Source(name="Test Paper")
         p.save()
         self.t = Topic(title="Test Topic")
         self.t.save()
-        self.a = Article(headline="Test", url="http://test.com", paper=p)
+        self.a = Article(headline="Test", url="http://test.com", source=p)
         self.a.save()
         self.a.topics.add(self.t)
         self.u = User(username="test")

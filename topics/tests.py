@@ -29,7 +29,7 @@ class ArticleTest(TestCase):
 
 class APITest(TestCase):
 
-    entry_points = ["articles", "papers", "topics"]
+    entry_points = ["articles", "sources", "topics"]
 
     def test_user_cannot_do_unsafe_requests(self):
         userclient = APIClient()
