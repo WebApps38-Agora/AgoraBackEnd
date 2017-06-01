@@ -8,11 +8,15 @@ class FenwickTree():
         # Index from 1 internally
         self.data = [0] * (size + 1)
 
-    def _is_valid(self, key):
+    def _is_valid_int(self, key):
         if isinstance(key, int):
-            if key < 0 or key >= len(self.data):
+            if key < 0 or key >= len(self.data) - 1:
                 raise KeyError()
-        elif isinstance(key, slice):
+        else:
+            raise TypeError()
+
+    def _is_valid_slice(self, key):
+        if isinstance(key, slice):
             if key.start < 0 or key.stop >= len(self.data):
                 raise KeyError()
         else:
@@ -22,10 +26,7 @@ class FenwickTree():
         return idx & (-idx)
 
     def __getitem__(self, key):
-        self._is_valid(key)
-        if isinstance(key, slice):
-            return self._get_range(slice.start, slice.stop)
-
+        self._is_valid_int(key)
         return self._get(key)
 
     def _get(self, idx):
@@ -43,7 +44,6 @@ class FenwickTree():
 
     def _add(self, idx, value):
         # Adjust index for internal idxing from 1
-        self._is_valid(idx)
         idx += 1
 
         while idx < len(self.data):
@@ -54,7 +54,7 @@ class FenwickTree():
         """
         Add value to elements in [start:stop)
         """
-        self._is_valid(slice(start, stop))
+        self._is_valid_slice(slice(start, stop))
 
         self._add(start, value)
         self._add(stop, -value)
