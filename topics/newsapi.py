@@ -1,5 +1,7 @@
 import requests
 import os
+from models import Article, Source
+from collections import defaultdict
 
 NEWS_API_KEY = os.environ['NEWS_API_KEY']
 NEWS_API_ARTICLES = 'https://newsapi.org/v1/articles'
@@ -57,4 +59,3 @@ def update_article_database(sources):
                                       'description': article['description'],
                                       'url_image': article['urlToImage'],
                                       'source': s})
-            a.save()

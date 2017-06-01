@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from topics.models import Article, Source, Topic
 from topics.serializers import (ArticleSerializer, SourceSerializer,
-                                TopicSerializer)
+
 import topics.newsapi as newsapi
 import topics.semantic as semantic
 

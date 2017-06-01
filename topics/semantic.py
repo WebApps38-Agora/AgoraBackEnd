@@ -1,7 +1,6 @@
 from gensim import corpora, models, similarities
 from topics.models import Article, Topic
 from collections import defaultdict
-import numpy
 
 SIMILARITY_THRESHOLD = 0.25
 
