@@ -92,7 +92,7 @@ class TopicsTest(TestCase):
             article.save()
 
     def test_corpus_created(self):
-        semantic.create_article_corpus()
+        semantic.create_all_topics()
         topics = Topic.objects.all()
 
         # There are 4 topics created, each one having the title of the first relvant article
