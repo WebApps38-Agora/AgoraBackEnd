@@ -1,11 +1,15 @@
 from rest_framework import permissions, viewsets
-from topics.models import Article, Paper, Topic
-from topics.serializers import (ArticleSerializer, PaperSerializer,
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from topics.models import Article, Source, Topic
+from topics.serializers import (ArticleSerializer, SourceSerializer,
                                 TopicSerializer)
+import topics.newsapi as newsapi
+import topics.semantic as semantic
 
 
 class TopicsAppPermission(permissions.BasePermission):
-    message = "Only an admin can add topics / articles / papers"
+    message = "Only an admin can add topics / articles / sources"
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -25,12 +29,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
     permission_classes = (TopicsAppPermission,)
 
 
-class PaperViewSet(viewsets.ModelViewSet):
+class SourceViewSet(viewsets.ModelViewSet):
     """
-    API endpoint for paper
+    API endpoint for sources
     """
-    queryset = Paper.objects.all()
-    serializer_class = PaperSerializer
+    queryset = Source.objects.all()
+    serializer_class = SourceSerializer
     permission_classes = (TopicsAppPermission,)
 
 
@@ -41,3 +45,10 @@ class TopicViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
     permission_classes = (TopicsAppPermission,)
+
+
+class UpdateNews(APIView):
+    def get(request, pk, format=None):
+        newsapi.update_article_database(['bbc-news', 'the-guardian-uk', 'daily-mail'])
+        semantic.create_all_topics()
+        return Response(status=200)

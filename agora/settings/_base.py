@@ -27,6 +27,7 @@ INSTALLED_APPS = [
 
     # External plugins
     'rest_framework',
+    'corsheaders',
 
     # Our apps
     'topics',
@@ -41,6 +42,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'agora.urls'
