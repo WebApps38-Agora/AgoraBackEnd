@@ -2,8 +2,9 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 
 from topics.models import Article, Source, Topic
-import semantic
-import newsapi
+
+import topics.newsapi as newsapi
+import topics.semantic as semantic
 
 
 class ArticleTest(TestCase):

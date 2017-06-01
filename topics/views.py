@@ -1,11 +1,11 @@
 from rest_framework import permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from models import Article, Source, Topic
-from serializers import (ArticleSerializer, SourceSerializer,
+from topics.models import Article, Source, Topic
+from topics.serializers import (ArticleSerializer, SourceSerializer,
                                 TopicSerializer)
-import newsapi
-import semantic
+import topics.newsapi as newsapi
+import topics.semantic as semantic
 
 
 class TopicsAppPermission(permissions.BasePermission):

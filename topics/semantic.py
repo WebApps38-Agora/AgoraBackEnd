@@ -1,5 +1,5 @@
 from gensim import corpora, models, similarities
-from models import Article, Topic
+from topics.models import Article, Topic
 from collections import defaultdict
 import numpy
 
@@ -74,7 +74,7 @@ def groups_to_topics_db(articles, groups):
     which should be placed under the same topic, and inserts the actual
     topics into the database, updating the relevant articles.'''
 
-    for key, article_set in groups.iteritems():
+    for key, article_set in groups.items():
         a = articles[key]
         if a.topics.count() == 0:
             topic = Topic(title=a.headline)
