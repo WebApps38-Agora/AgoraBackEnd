@@ -1,11 +1,15 @@
 from rest_framework import permissions, viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from models import Article, Source, Topic
 from serializers import (ArticleSerializer, SourceSerializer,
                                 TopicSerializer)
+import newsapi
+import semantic
 
 
 class TopicsAppPermission(permissions.BasePermission):
-    message = "Only an admin can add topics / articles / papers"
+    message = "Only an admin can add topics / articles / sources"
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -41,3 +45,10 @@ class TopicViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
     permission_classes = (TopicsAppPermission,)
+
+
+class UpdateNews(APIView):
+    def get(request, pk, format=None):
+        newsapi.update_article_database(['bbc-news', 'the-guardian-uk', 'daily-mail'])
+        semantic.create_all_topics()
+        return Response(status=200)

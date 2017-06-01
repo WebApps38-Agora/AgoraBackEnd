@@ -10,7 +10,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
             "description",
             "content",
             "url",
-            "paper",
+            "source",
             "topics",
         )
 

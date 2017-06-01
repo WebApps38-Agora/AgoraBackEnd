@@ -7,7 +7,7 @@ from django.contrib import admin
 
 router = routers.DefaultRouter()
 router.register(r'articles', topic_views.ArticleViewSet)
-router.register(r'papers', topic_views.SourceViewSet)
+router.register(r'sources', topic_views.SourceViewSet)
 router.register(r'topics', topic_views.TopicViewSet)
 router.register(r'reactions', metric_views.ReactionViewset)
 
@@ -17,5 +17,6 @@ urlpatterns = [
         r'^metrics/articles/(?P<article>[0-9]+)/$',
         metric_views.ArticleMetricsAPIView.as_view()
     ),
-    url(r'^admin/', admin.site.urls)
+    url(r'^admin/', admin.site.urls),
+    url(r'^update_news/', topic_views.UpdateNews.as_view())
 ]
