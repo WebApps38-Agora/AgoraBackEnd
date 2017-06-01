@@ -8,6 +8,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "headline",
             "description",
+            "content",
             "url",
             "paper",
             "topics",

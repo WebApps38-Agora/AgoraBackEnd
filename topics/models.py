@@ -19,7 +19,13 @@ class Paper(models.Model):
 class Article(models.Model):
     headline = models.CharField(max_length=140)
     description = models.CharField(max_length=1000, blank=True)
+    content = models.TextField()
+    content_len = models.PositiveIntegerField()
     url = models.URLField()
 
     topics = models.ManyToManyField(Topic)
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        self.content_len = len(self.content)
+        super().save(*args, **kwargs)
