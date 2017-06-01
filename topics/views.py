@@ -1,6 +1,6 @@
 from rest_framework import permissions, viewsets
-from topics.models import Article, Source, Topic
-from topics.serializers import (ArticleSerializer, SourceSerializer,
+from models import Article, Source, Topic
+from serializers import (ArticleSerializer, SourceSerializer,
                                 TopicSerializer)
 
 

@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 
 from topics.models import Article, Source, Topic
+import semantic
 import newsapi
 
 
@@ -72,3 +73,30 @@ class NewsApiTest(TestCase):
         newsapi.update_article_database(['bbc-news'])
         new = len(Article.objects.all())
         self.assertEqual(previous, new)
+
+
+class TopicsTest(TestCase):
+    def setUp(self):
+        self.s = Source(name="Some Paper")
+        self.s.save()
+        self.articles = [None]*6
+        self.articles[0] = Article(
+            url='1', headline="Theresa May calls snap election")
+        self.articles[1] = Article(
+            url='2', headline="UK Prime Minister announces sudden election")
+        self.articles[2] = Article(
+            url='3',
+            headline="Turkish president accused of fabricating army coup")
+        self.articles[3] = Article(
+            url='4',
+            headline="Recent Turkish coup to strengthen Erdogan's position")
+        self.articles[4] = Article(
+            url='5', headline="Turkish mafia on the rise")
+        self.articles[5] = Article(
+            url='6', headline="The UK to leave the european union")
+        for article in self.articles:
+            article.source = self.s
+            article.save()
+
+    def test_corpus_created(self):
+        semantic.create_article_corpus()
