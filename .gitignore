@@ -11,6 +11,7 @@ _mailinglist
 .tox
 .cache/
 .idea/
+*.sqlite3
 
 # Created by https://www.gitignore.io/api/python,virtualenv
 
