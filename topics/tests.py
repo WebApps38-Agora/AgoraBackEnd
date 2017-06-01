@@ -91,7 +91,7 @@ class TopicsTest(TestCase):
             article.source = self.s
             article.save()
 
-    def test_corpus_created(self):
+    def test_topics_created(self):
         semantic.create_all_topics()
         topics = Topic.objects.all()
 
