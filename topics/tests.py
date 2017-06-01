@@ -79,24 +79,38 @@ class TopicsTest(TestCase):
     def setUp(self):
         self.s = Source(name="Some Paper")
         self.s.save()
-        self.articles = [None]*6
-        self.articles[0] = Article(
-            url='1', headline="Theresa May calls snap election")
-        self.articles[1] = Article(
-            url='2', headline="UK Prime Minister announces sudden election")
-        self.articles[2] = Article(
-            url='3',
-            headline="Turkish president accused of fabricating army coup")
-        self.articles[3] = Article(
-            url='4',
-            headline="Recent Turkish coup to strengthen Erdogan's position")
-        self.articles[4] = Article(
-            url='5', headline="Turkish mafia on the rise")
-        self.articles[5] = Article(
-            url='6', headline="The UK to leave the european union")
+        self.articles = [None]*7
+        self.articles[0] = Article(url='1', headline="Theresa May calls snap election")
+        self.articles[1] = Article(url='2', headline="Theresa May announces snap election")
+        self.articles[2] = Article(url='3', headline="May surprises the UK with an election")
+        self.articles[3] = Article(url='4', headline="Turkish president accused of fabricating army coup")
+        self.articles[4] = Article(url='5', headline="Recent Turkish coup to strengthen Erdogan's position")
+        self.articles[5] = Article(url='6', headline="Turkish mafia on the rise")
+        self.articles[6] = Article(url='7', headline="The UK to leave the european union")
         for article in self.articles:
             article.source = self.s
             article.save()
 
     def test_corpus_created(self):
         semantic.create_article_corpus()
+        topics = Topic.objects.all()
+
+        # There are 4 topics created, each one having the title of the first relvant article
+        self.assertEqual(Topic.objects.count(), 4)
+        self.assertEqual(topics[0].title, 'Theresa May calls snap election')
+        self.assertEqual(topics[1].title, 'Turkish president accused of fabricating army coup')
+        self.assertEqual(topics[2].title, 'Turkish mafia on the rise')
+        self.assertEqual(topics[3].title, 'The UK to leave the european union')
+
+        # Theresa May election articles grouped together
+        self.assertEqual(self.articles[0].topics.all()[0], topics[0])
+        self.assertEqual(self.articles[1].topics.all()[0], topics[0])
+        self.assertEqual(self.articles[2].topics.all()[0], topics[0])
+
+        # Turkish coup articles grouped together
+        self.assertEqual(self.articles[3].topics.all()[0], topics[1])
+        self.assertEqual(self.articles[4].topics.all()[0], topics[1])
+
+        # The rest are seperate topics
+        self.assertEqual(self.articles[5].topics.all()[0], topics[2])
+        self.assertEqual(self.articles[6].topics.all()[0], topics[3])

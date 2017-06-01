@@ -37,9 +37,10 @@ def create_article_corpus():
     for i, sims in enumerate(similarity_table):
         sorted_sims = sorted(enumerate(sims), key=lambda item: -item[1])
         similarity = sorted_sims[1]
-        print(str(similarity[1]) + ': ' + headlines[i] + ' is most similar to ' + headlines[similarity[0]])
+        #print(str(similarity[1]) + ': ' + headlines[i] + ' is most similar to ' + headlines[similarity[0]])
 
         groups[i] = set()
+        groups[i].add(i)
         if (similarity[1] > SIMILARITY_THRESHOLD):
             groups[i].add(similarity[0])
             groups[similarity[0]].add(i)
