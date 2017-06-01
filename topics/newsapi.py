@@ -1,6 +1,6 @@
 import requests
 import os
-from models import Article, Source
+from topics.models import Article, Source
 from collections import defaultdict
 
 NEWS_API_KEY = os.environ['NEWS_API_KEY']

@@ -1,6 +1,5 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-
 from topics.models import Article, Source, Topic
 
 import topics.newsapi as newsapi
