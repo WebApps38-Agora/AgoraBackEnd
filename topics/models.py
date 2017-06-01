@@ -25,3 +25,7 @@ class Article(models.Model):
 
     topics = models.ManyToManyField(Topic)
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        self.content_len = len(self.content)
+        super().save(*args, **kwargs)
