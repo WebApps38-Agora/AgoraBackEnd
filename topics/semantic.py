@@ -12,7 +12,8 @@ class ArticleCorpus(corpora.TextCorpus):
 
 def create_article_corpus():
     headlines = [article.headline for article in Article.objects.all()]
-    corpus = ArticleCorpus([tokenize(headline) for headline in headlines])
+    tokenized_headlines = [tokenize(headline) for headline in headlines]
+    corpus = ArticleCorpus(tokenized_headlines)
 
     tfidf = models.TfidfModel(corpus)
     corpus_tfidf = tfidf[corpus]
@@ -21,13 +22,17 @@ def create_article_corpus():
     corpus_lsi = lsi[corpus]
 
     index = similarities.MatrixSimilarity(lsi[corpus])
-    for headline in headlines:
-        vec_bow = corpus.dictionary.doc2bow(tokenize(headline))
-        vec_lsi = lsi[vec_bow]
-        sims = index[vec_lsi]
+    similarity_table = index[[to_lsi_vector(corpus, lsi, headline) for headline in headlines]]
+
+    for i, sims in enumerate(similarity_table):
         sorted_sims = sorted(enumerate(sims), key=lambda item: -item[1])
         similarity = sorted_sims[1]
-        print(str(similarity[1]) + ': ' + headline + ' is most similar to ' + headlines[similarity[0]])
+        print(str(similarity[1]) + ': ' + headlines[i] + ' is most similar to ' + headlines[similarity[0]])
+
+def to_lsi_vector(corpus, lsi, headline):
+    vec_bow = corpus.dictionary.doc2bow(tokenize(headline))
+    vec_lsi = lsi[vec_bow]
+    return vec_lsi
 
 def tokenize(text):
     #return text.split()
