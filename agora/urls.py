@@ -12,4 +12,8 @@ router.register(r'reactions', metric_views.ReactionViewset)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(
+        r'^metrics/articles/(?P<article>[0-9]+)/$',
+        metric_views.ArticleMetricsAPIView.as_view()
+    ),
 ]
