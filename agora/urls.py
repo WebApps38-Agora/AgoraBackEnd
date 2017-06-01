@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from metrics import views as metric_views
 from topics import views as topic_views
+from django.contrib import admin
 
 router = routers.DefaultRouter()
 router.register(r'articles', topic_views.ArticleViewSet)
@@ -16,4 +17,5 @@ urlpatterns = [
         r'^metrics/articles/(?P<article>[0-9]+)/$',
         metric_views.ArticleMetricsAPIView.as_view()
     ),
+    url(r'^admin/', admin.site.urls)
 ]
