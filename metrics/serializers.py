@@ -53,3 +53,18 @@ class ReactionSerializer(serializers.HyperlinkedModelSerializer):
             "reaction",
             "comment",
         )
+
+
+class ArticleMetric():
+    def __init__(self, bias=None, fact=None, fake=None, opinion=None):
+        self.bias = bias or 0
+        self.fact = fact or 0
+        self.fake = fake or 0
+        self.opinion = opinion or 0
+
+
+class ArticleMetricsSerializer(serializers.Serializer):
+    bias = serializers.IntegerField()
+    fact = serializers.IntegerField()
+    fake = serializers.IntegerField()
+    opinion = serializers.IntegerField()
