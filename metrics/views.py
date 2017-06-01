@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 
-from metrics.models import Metric
-from metrics.serializers import MetricSerializer
+from metrics.models import Reaction
+from metrics.serializers import ReactionSerializer
 
 
-class MetricViewset(viewsets.ModelViewSet):
-    queryset = Metric.objects.all()
-    serializer_class = MetricSerializer
+class ReactionViewset(viewsets.ModelViewSet):
+    queryset = Reaction.objects.all()
+    serializer_class = ReactionSerializer

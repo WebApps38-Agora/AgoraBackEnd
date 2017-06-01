@@ -8,7 +8,7 @@ router = routers.DefaultRouter()
 router.register(r'articles', topic_views.ArticleViewSet)
 router.register(r'papers', topic_views.PaperViewSet)
 router.register(r'topics', topic_views.TopicViewSet)
-router.register(r'metrics', metric_views.MetricViewset)
+router.register(r'reactions', metric_views.ReactionViewset)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

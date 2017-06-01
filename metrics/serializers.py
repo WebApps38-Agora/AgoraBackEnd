@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from metrics.models import Metric
+from metrics.models import Reaction
 
 
-class MetricSerializer(serializers.HyperlinkedModelSerializer):
+class ReactionSerializer(serializers.HyperlinkedModelSerializer):
     # TODO: remove next line when user API implemented
     owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
@@ -13,7 +13,7 @@ class MetricSerializer(serializers.HyperlinkedModelSerializer):
         Check for overlapping reactions assumes content is going to be correct
         """
         data["content_end"] = data["location"] + len(data["content"])
-        reactions = Metric.objects.filter(
+        reactions = Reaction.objects.filter(
             article=data["article"],
             topic=data["topic"],
             owner=data["owner"],
@@ -43,7 +43,7 @@ class MetricSerializer(serializers.HyperlinkedModelSerializer):
         return data
 
     class Meta:
-        model = Metric
+        model = Reaction
         fields = (
             "article",
             "topic",

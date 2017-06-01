@@ -2,12 +2,12 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.serializers import ValidationError
 
-from metrics.models import Metric
-from metrics.serializers import MetricSerializer
+from metrics.models import Reaction
+from metrics.serializers import ReactionSerializer
 from topics.models import Article, Paper, Topic
 
 
-class MetricSerializerTest(TestCase):
+class ReactionSerializerTest(TestCase):
 
     def setUp(self):
         p = Paper(name="Test Paper")
@@ -20,7 +20,7 @@ class MetricSerializerTest(TestCase):
         self.u = User(username="test")
         self.u.save()
 
-        reaction = Metric(
+        reaction = Reaction(
             article=self.a,
             topic=self.t,
             owner=self.u,
@@ -41,7 +41,7 @@ class MetricSerializerTest(TestCase):
             'reaction': 1,
         }
 
-        serializer = MetricSerializer()
+        serializer = ReactionSerializer()
 
         self.assertRaises(ValidationError, serializer.validate, data)
 
@@ -55,7 +55,7 @@ class MetricSerializerTest(TestCase):
             'reaction': 1,
         }
 
-        serializer = MetricSerializer()
+        serializer = ReactionSerializer()
 
         self.assertRaises(ValidationError, serializer.validate, data)
 
@@ -69,7 +69,7 @@ class MetricSerializerTest(TestCase):
             'reaction': 1,
         }
 
-        serializer = MetricSerializer()
+        serializer = ReactionSerializer()
 
         self.assertRaises(ValidationError, serializer.validate, data)
 
@@ -83,7 +83,7 @@ class MetricSerializerTest(TestCase):
             'reaction': 2,
         }
 
-        serializer = MetricSerializer()
+        serializer = ReactionSerializer()
 
         try:
             serializer.validate(data)
@@ -100,7 +100,7 @@ class MetricSerializerTest(TestCase):
             'reaction': 1,
         }
 
-        serializer = MetricSerializer()
+        serializer = ReactionSerializer()
 
         try:
             serializer.validate(data)

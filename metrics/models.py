@@ -4,7 +4,7 @@ from django.db import models
 from topics.models import Article, Topic
 
 
-class Metric(models.Model):
+class Reaction(models.Model):
     article = models.ForeignKey(Article)
     topic = models.ForeignKey(Topic)
     owner = models.ForeignKey(User)
