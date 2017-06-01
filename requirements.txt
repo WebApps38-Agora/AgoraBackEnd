@@ -8,3 +8,4 @@ pytz==2017.2
 six==1.10.0
 requests==2.8.1
 gensim==2.1.0
+django-cors-headers==2.1.0
