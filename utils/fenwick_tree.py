@@ -51,7 +51,10 @@ class FenwickTree():
             idx += self._lsb(idx)
 
     def add_range(self, start, stop, value=1):
+        """
+        Add value to elements in [start:stop)
+        """
         self._is_valid(slice(start, stop))
 
         self._add(start, value)
-        self._add(stop + 1, -value)
+        self._add(stop, -value)
