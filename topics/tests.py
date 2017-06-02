@@ -1,11 +1,9 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-
 from topics.models import Article, Source, Topic
 
 import topics.newsapi as newsapi
 import topics.semantic as semantic
-
 
 class ArticleTest(TestCase):
 
@@ -18,8 +16,8 @@ class ArticleTest(TestCase):
         self.a2.save()
 
     def test_article_can_have_more_than_one_topic(self):
-        t1 = Topic(title="t1")
-        t2 = Topic(title="t2")
+        t1 = Topic()
+        t2 = Topic()
         t1.save()
         t2.save()
 
@@ -98,10 +96,10 @@ class TopicsTest(TestCase):
 
         # There are 4 topics created, each one having the title of the first relvant article
         self.assertEqual(Topic.objects.count(), 4)
-        self.assertEqual(topics[0].title, 'Theresa May calls snap election')
-        self.assertEqual(topics[1].title, 'Turkish president accused of fabricating army coup')
-        self.assertEqual(topics[2].title, 'Turkish mafia on the rise')
-        self.assertEqual(topics[3].title, 'The UK to leave the european union')
+        self.assertEqual(topics[0].title(), 'Theresa May calls snap election')
+        self.assertEqual(topics[1].title(), 'Turkish president accused of fabricating army coup')
+        self.assertEqual(topics[2].title(), 'Turkish mafia on the rise')
+        self.assertEqual(topics[3].title(), 'The UK to leave the european union')
 
         # Theresa May election articles grouped together
         self.assertEqual(self.articles[0].topics.all()[0], topics[0])

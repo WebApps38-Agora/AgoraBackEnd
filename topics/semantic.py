@@ -1,7 +1,6 @@
 from gensim import corpora, models, similarities
 from topics.models import Article, Topic
 from collections import defaultdict
-import numpy
 
 SIMILARITY_THRESHOLD = 0.25
 
@@ -77,7 +76,7 @@ def groups_to_topics_db(articles, groups):
     for key, article_set in groups.items():
         a = articles[key]
         if a.topics.count() == 0:
-            topic = Topic(title=a.headline)
+            topic = Topic()
             topic.save()
             for article in article_set:
                 a = articles[article]

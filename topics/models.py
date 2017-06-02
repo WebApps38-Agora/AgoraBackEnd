@@ -5,8 +5,10 @@ class Topic(models.Model):
     """
     Definition of a news Topic.
     """
-    title = models.CharField(max_length=140)
     date = models.DateField(auto_now_add=True)
+
+    def title(self):
+        return self.article_set.all()[0].headline if self.article_set.count() > 0 else ''
 
 
 class Source(models.Model):
@@ -14,14 +16,13 @@ class Source(models.Model):
     A news outlet. Can be used to collect metrics and group articles.
     """
     id = models.CharField(primary_key=True, max_length=30)
-
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=200)
+    url = models.URLField()
+    url_logo = models.URLField()
 
 
 class Article(models.Model):
-    url = models.URLField()
-
     headline = models.CharField(max_length=140)
     description = models.CharField(max_length=1000, blank=True)
     content = models.TextField()

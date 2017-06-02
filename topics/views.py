@@ -1,9 +1,11 @@
 from rest_framework import permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
 from topics.models import Article, Source, Topic
 from topics.serializers import (ArticleSerializer, SourceSerializer,
                                 TopicSerializer)
+
 import topics.newsapi as newsapi
 import topics.semantic as semantic
 

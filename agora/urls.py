@@ -8,6 +8,7 @@ from django.contrib import admin
 router = routers.DefaultRouter()
 router.register(r'articles', topic_views.ArticleViewSet)
 router.register(r'sources', topic_views.SourceViewSet)
+router.register(r'papers', topic_views.SourceViewSet)
 router.register(r'topics', topic_views.TopicViewSet)
 router.register(r'reactions', metric_views.ReactionViewset)
 
