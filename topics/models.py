@@ -32,6 +32,7 @@ class Article(models.Model):
 
     topics = models.ManyToManyField(Topic)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
+    topic_id = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
         self.content_len = len(self.content)

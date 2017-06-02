@@ -13,7 +13,8 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
             "url",
             "source",
             "topics",
-            "url_image"
+            "url_image",
+            "topic_id"
         )
 
 

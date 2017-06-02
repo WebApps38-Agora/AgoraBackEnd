@@ -81,6 +81,7 @@ def groups_to_topics_db(articles, groups):
             for article in article_set:
                 a = articles[article]
                 a.topics.add(topic)
+                a.topic_id = topic.id
                 a.save()
 
 
