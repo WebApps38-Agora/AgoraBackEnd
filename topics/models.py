@@ -17,9 +17,9 @@ class Source(models.Model):
     """
     id = models.CharField(primary_key=True, max_length=30)
     name = models.CharField(max_length=30)
-    description = models.CharField(max_length=200)
-    url = models.URLField()
-    url_logo = models.URLField()
+    description = models.CharField(max_length=1000)
+    url = models.URLField(max_length=500)
+    url_logo = models.URLField(max_length=500)
 
 
 class Article(models.Model):
@@ -27,8 +27,8 @@ class Article(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     content = models.TextField()
     content_len = models.PositiveIntegerField()
-    url = models.URLField()
-    url_image = models.URLField()
+    url = models.URLField(max_length=500)
+    url_image = models.URLField(max_length=500)
 
     topics = models.ManyToManyField(Topic)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
