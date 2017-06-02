@@ -51,6 +51,6 @@ class TopicViewSet(viewsets.ModelViewSet):
 
 class UpdateNews(APIView):
     def get(request, pk, format=None):
-        newsapi.update_article_database(['bbc-news', 'the-guardian-uk', 'daily-mail'])
+        newsapi.update_article_database([source['id'] for source in newsapi.get_all_sources()])
         semantic.create_all_topics()
         return Response(status=200)

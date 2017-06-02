@@ -17,18 +17,18 @@ class Source(models.Model):
     """
     id = models.CharField(primary_key=True, max_length=30)
     name = models.CharField(max_length=30)
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True, null=True)
     url = models.URLField(max_length=500)
-    url_logo = models.URLField(max_length=500)
+    url_logo = models.URLField(max_length=500, blank=True, null=True)
 
 
 class Article(models.Model):
     headline = models.CharField(max_length=140)
-    description = models.CharField(max_length=1000, blank=True)
+    description = models.CharField(max_length=1000, blank=True, null=True)
     content = models.TextField()
     content_len = models.PositiveIntegerField()
     url = models.URLField(max_length=500)
-    url_image = models.URLField(max_length=500)
+    url_image = models.URLField(max_length=500, blank=True, null=True)
 
     topics = models.ManyToManyField(Topic)
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
