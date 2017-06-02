@@ -12,7 +12,7 @@ class ReactionSerializerTest(TestCase):
     def setUp(self):
         p = Source(name="Test Paper")
         p.save()
-        self.t = Topic(title="Test Topic")
+        self.t = Topic()
         self.t.save()
         self.a = Article(headline="Test", url="http://test.com", source=p)
         self.a.save()

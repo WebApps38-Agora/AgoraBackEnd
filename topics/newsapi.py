@@ -35,7 +35,7 @@ def get_newest_articles(source, sort_by='top'):
                            'set the NEWS_API_KEY environment variable?'.format(source))
 
 
-def get_sources(language='en'):
+def get_all_sources(language='en'):
     params = {
         'language': language
     }

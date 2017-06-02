@@ -7,6 +7,9 @@ class Topic(models.Model):
     """
     date = models.DateField(auto_now_add=True)
 
+    def title(self):
+        return self.article_set.all()[0].headline if self.article_set.count() > 0 else ''
+
 
 class Source(models.Model):
     """
