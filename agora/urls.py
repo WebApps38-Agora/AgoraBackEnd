@@ -19,5 +19,4 @@ urlpatterns = [
         metric_views.ArticleMetricsAPIView.as_view()
     ),
     url(r'^admin/', admin.site.urls),
-    url(r'^update_news/', topic_views.UpdateNews.as_view())
 ]
