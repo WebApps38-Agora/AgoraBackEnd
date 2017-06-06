@@ -5,8 +5,6 @@ class Topic(models.Model):
     """
     Definition of a news Topic.
     """
-    date = models.DateField(auto_now_add=True)
-
     def title(self):
         return self.article_set.all()[0].headline if self.article_set.count() > 0 else ''
 
@@ -29,6 +27,7 @@ class Article(models.Model):
     content_len = models.PositiveIntegerField()
     url = models.URLField(max_length=500)
     url_image = models.URLField(max_length=500)
+    published_at = models.DateTimeField(null=True)
 
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True)
     source = models.ForeignKey(Source, on_delete=models.CASCADE, null=True)
