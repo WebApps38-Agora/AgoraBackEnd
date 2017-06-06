@@ -24,6 +24,8 @@ class ArticleReactionSerializer(serializers.HyperlinkedModelSerializer):
                 "Total percentage of metrics should add up to 100"
             )
 
+        return data
+
     class Meta:
         model = ArticleReaction
         fields = (
