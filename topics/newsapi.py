@@ -31,10 +31,8 @@ def get_newest_articles(source, sort_by='top'):
     if response['status'] == 'ok':
         return response['articles']
     else:
-        return []
-        #Log here
-        #raise NewsApiError('Could not fetch articles for source {}, have you '
-        #                   'set the NEWS_API_KEY environment variable?'.format(source))
+        raise NewsApiError('Could not fetch articles for source {}, have you '
+                           'set the NEWS_API_KEY environment variable?'.format(source))
 
 
 def get_all_sources(language='en'):
