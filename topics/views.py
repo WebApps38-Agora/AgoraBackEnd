@@ -48,6 +48,9 @@ class TopicViewSet(viewsets.ModelViewSet):
     serializer_class = TopicSerializer
     permission_classes = (TopicsAppPermission,)
 
+    def get_queryset(self):
+        return sorted(Topic.objects.all(), key=lambda t: t.ranking, reverse=True)
+
 
 class UpdateNews(APIView):
     def get(request, pk, format=None):

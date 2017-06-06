@@ -40,4 +40,5 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
             "title",
             "published_at",
             "views",
+            "ranking",
         )
