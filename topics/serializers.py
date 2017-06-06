@@ -27,7 +27,7 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
             "name",
             "article_set",
             "url",
-            "url_logo"
+            "url_logo",
         )
 
 
@@ -37,4 +37,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "id",
             "article_set",
+            "title",
+            "published_at",
+            "views",
         )

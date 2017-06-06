@@ -5,6 +5,9 @@ class Topic(models.Model):
     """
     Definition of a news Topic.
     """
+    published_at = models.DateTimeField(auto_now_add=True, blank=True)
+    views = models.PositiveIntegerField(default=0)
+
     def title(self):
         return self.article_set.all()[0].headline if self.article_set.count() > 0 else ''
 

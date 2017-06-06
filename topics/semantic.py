@@ -4,6 +4,7 @@ from collections import defaultdict
 
 SIMILARITY_THRESHOLD = 0.25
 
+
 class ArticleCorpus(corpora.TextCorpus):
     def get_texts(self):
         for text in self.input:
@@ -51,7 +52,6 @@ def group_articles_using_similarities(similarity_table):
         # Take the second-highest simularity (which will be the most
         # similar headline other that that of the current article, value 1)
         similarity = sorted_sims[1]
-        #print(str(similarity[1]) + ': ' + headlines[i] + ' is most similar to ' + headlines[similarity[0]])
 
         article_id = similarity[0]
         sim_value = similarity[1]
@@ -82,6 +82,7 @@ def groups_to_topics_db(articles, groups):
                 a = articles[article]
                 a.topic = topic
                 a.save()
+
 
 def to_lsi_vector(corpus, lsi, tokenized_headline):
     vec_bow = corpus.dictionary.doc2bow(tokenized_headline)
