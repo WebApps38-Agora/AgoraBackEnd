@@ -75,15 +75,13 @@ def groups_to_topics_db(articles, groups):
 
     for key, article_set in groups.items():
         a = articles[key]
-        if a.topics.count() == 0:
+        if a.topic == None:
             topic = Topic()
             topic.save()
             for article in article_set:
                 a = articles[article]
-                a.topics.add(topic)
-                a.topic_id = topic.id
+                a.topic = topic
                 a.save()
-
 
 def to_lsi_vector(corpus, lsi, tokenized_headline):
     vec_bow = corpus.dictionary.doc2bow(tokenized_headline)

@@ -30,9 +30,8 @@ class Article(models.Model):
     url = models.URLField(max_length=500)
     url_image = models.URLField(max_length=500)
 
-    topics = models.ManyToManyField(Topic)
-    source = models.ForeignKey(Source, on_delete=models.CASCADE)
-    topic_id = models.PositiveIntegerField(default=0)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True)
+    source = models.ForeignKey(Source, on_delete=models.CASCADE, null=True)
 
     def save(self, *args, **kwargs):
         self.content_len = len(self.content)
