@@ -2,12 +2,12 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.serializers import ValidationError
 
-from metrics.models import Reaction
-from metrics.serializers import ReactionSerializer
+from metrics.models import HighlightedReaction
+from metrics.serializers import HighlightedReactionSerializer
 from topics.models import Article, Source, Topic
 
 
-class ReactionSerializerTest(TestCase):
+class HighlightedReactionSerializerTest(TestCase):
 
     def setUp(self):
         p = Source(name="Test Paper")
@@ -20,7 +20,7 @@ class ReactionSerializerTest(TestCase):
         self.u = User(username="test")
         self.u.save()
 
-        reaction = Reaction(
+        reaction = HighlightedReaction(
             article=self.a,
             topic=self.t,
             owner=self.u,
@@ -41,7 +41,7 @@ class ReactionSerializerTest(TestCase):
             'reaction': 1,
         }
 
-        serializer = ReactionSerializer()
+        serializer = HighlightedReactionSerializer()
 
         self.assertRaises(ValidationError, serializer.validate, data)
 
@@ -55,7 +55,7 @@ class ReactionSerializerTest(TestCase):
             'reaction': 1,
         }
 
-        serializer = ReactionSerializer()
+        serializer = HighlightedReactionSerializer()
 
         self.assertRaises(ValidationError, serializer.validate, data)
 
@@ -69,7 +69,7 @@ class ReactionSerializerTest(TestCase):
             'reaction': 1,
         }
 
-        serializer = ReactionSerializer()
+        serializer = HighlightedReactionSerializer()
 
         self.assertRaises(ValidationError, serializer.validate, data)
 
@@ -83,7 +83,7 @@ class ReactionSerializerTest(TestCase):
             'reaction': 2,
         }
 
-        serializer = ReactionSerializer()
+        serializer = HighlightedReactionSerializer()
 
         try:
             serializer.validate(data)
@@ -100,9 +100,9 @@ class ReactionSerializerTest(TestCase):
             'reaction': 1,
         }
 
-        serializer = ReactionSerializer()
+        serializer = HighlightedReactionSerializer()
 
         try:
             serializer.validate(data)
         except ValidationError:
-            self.fail("Reactions to diff. content should be valid")
+            self.fail("HighlightedReactions to diff. content should be valid")

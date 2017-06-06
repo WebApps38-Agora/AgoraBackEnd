@@ -4,7 +4,7 @@ from rest_framework import serializers
 from metrics.models import Reaction
 
 
-class ReactionSerializer(serializers.HyperlinkedModelSerializer):
+class HighlightedReactionSerializer(serializers.HyperlinkedModelSerializer):
     # TODO: remove next line when user API implemented
     owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
@@ -60,11 +60,9 @@ class ArticleMetric():
         self.bias = bias or 0
         self.fact = fact or 0
         self.fake = fake or 0
-        self.opinion = opinion or 0
 
 
 class ArticleMetricsSerializer(serializers.Serializer):
     bias = serializers.IntegerField()
     fact = serializers.IntegerField()
     fake = serializers.IntegerField()
-    opinion = serializers.IntegerField()

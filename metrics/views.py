@@ -2,23 +2,23 @@ from collections import defaultdict
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, viewsets
 
-from metrics.models import Reaction
+from metrics.models import HighlightedReaction
 from metrics.serializers import (ArticleMetric, ArticleMetricsSerializer,
-                                 ReactionSerializer)
+                                 HighlightedReactionSerializer)
 from topics.models import Article
 from utils.fenwick_tree import FenwickTree
 
 
-class ReactionViewset(viewsets.ModelViewSet):
-    queryset = Reaction.objects.all()
-    serializer_class = ReactionSerializer
+class HighlightedReactionViewset(viewsets.ModelViewSet):
+    queryset = HighlightedReaction.objects.all()
+    serializer_class = HighlightedReactionSerializer
 
 
-class ArticleMetricsAPIView(generics.RetrieveAPIView):
+class ArticleHighlightedMetricsAPIView(generics.RetrieveAPIView):
     """
-    Retrieve %s of article bias/facts/opinions/etc.
+    Retrieve %s of article bias/facts/opinions/etc from highlighted reactions
     """
-    queryset = Reaction.objects.all()
+    queryset = HighlightedReaction.objects.all()
     serializer_class = ArticleMetricsSerializer
     lookup_field = "article"
 
@@ -30,7 +30,6 @@ class ArticleMetricsAPIView(generics.RetrieveAPIView):
         bias = FenwickTree(article.content_len)
         fact = FenwickTree(article.content_len)
         fake = FenwickTree(article.content_len)
-        opinion = FenwickTree(article.content_len)
 
         for reaction in reactions:
             react = reaction.get_reaction_display()
@@ -41,8 +40,6 @@ class ArticleMetricsAPIView(generics.RetrieveAPIView):
                 fact.add_range(reaction.location, reaction.content_end)
             elif react is "Fake":
                 fake.add_range(reaction.location, reaction.content_end)
-            elif react is "Opinion":
-                opinion.add_range(reaction.location, reaction.content_end)
 
         reaction_counts = defaultdict(int)
 
@@ -51,7 +48,6 @@ class ArticleMetricsAPIView(generics.RetrieveAPIView):
                 "bias": bias[idx],
                 "fact": fact[idx],
                 "fake": fake[idx],
-                "opinion": fake[idx],
             }
 
             max_value = max(reactions_here.values())
