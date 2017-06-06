@@ -25,7 +25,7 @@ class ArticleReactionSerializer(serializers.HyperlinkedModelSerializer):
             )
 
     class Meta:
-        model = HighlightedReaction
+        model = ArticleReaction
         fields = (
             "article",
             "topic",
