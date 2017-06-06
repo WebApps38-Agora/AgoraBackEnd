@@ -41,3 +41,6 @@ class ArticleReaction(Reaction):
     bias_percent = models.FloatField()
     fact_percent = models.FloatField()
     fake_percent = models.FloatField()
+
+    class Meta:
+        unique_together = ("owner", "article")

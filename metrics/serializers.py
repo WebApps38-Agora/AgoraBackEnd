@@ -2,8 +2,9 @@ from math import isclose
 
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
-from metrics.models import HighlightedReaction
+from metrics.models import ArticleReaction, HighlightedReaction
 
 
 class ArticleReactionSerializer(serializers.HyperlinkedModelSerializer):
@@ -33,6 +34,12 @@ class ArticleReactionSerializer(serializers.HyperlinkedModelSerializer):
             "fact_percent",
             "fake_percent",
         )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=ArticleReaction.objects.all(),
+                fields=("owner", "article")
+            )
+        ]
 
 
 class HighlightedReactionSerializer(serializers.HyperlinkedModelSerializer):
