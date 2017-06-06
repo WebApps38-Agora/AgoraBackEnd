@@ -75,10 +75,10 @@ class TopicsTest(TestCase):
 
         # There are 4 topics created, each one having the title of the first relvant article
         self.assertEqual(Topic.objects.count(), 4)
-        self.assertEqual(topics[0].title(), 'Theresa May calls snap election')
-        self.assertEqual(topics[1].title(), 'Turkish president accused of fabricating army coup')
-        self.assertEqual(topics[2].title(), 'Turkish mafia on the rise')
-        self.assertEqual(topics[3].title(), 'The UK to leave the european union')
+        self.assertEqual(topics[0].title, 'Theresa May calls snap election')
+        self.assertEqual(topics[1].title, 'Turkish president accused of fabricating army coup')
+        self.assertEqual(topics[2].title, 'Turkish mafia on the rise')
+        self.assertEqual(topics[3].title, 'The UK to leave the european union')
 
         # Theresa May election articles grouped together
         self.assertEqual(articles[0].topic, topics[0])
