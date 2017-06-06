@@ -1,7 +1,38 @@
+from math import isclose
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from metrics.models import Reaction
+from metrics.models import HighlightedReaction
+
+
+class ArticleReactionSerializer(serializers.HyperlinkedModelSerializer):
+    # TODO: remove next line when user API implemented
+    owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    def validate(self, data):
+        """
+        Checks that sum of different fields = 100
+        """
+        total_sum = (
+            data["bias_percent"] + data["fact_percent"] + data["fake_percent"]
+        )
+
+        if not isclose(total_sum, 100, rel_tol=1e-5):
+            raise serializers.ValidationError(
+                "Total percentage of metrics should add up to 100"
+            )
+
+    class Meta:
+        model = HighlightedReaction
+        fields = (
+            "article",
+            "topic",
+            "owner",
+            "bias_percent",
+            "fact_percent",
+            "fake_percent",
+        )
 
 
 class HighlightedReactionSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,7 +44,7 @@ class HighlightedReactionSerializer(serializers.HyperlinkedModelSerializer):
         Check for overlapping reactions assumes content is going to be correct
         """
         data["content_end"] = data["location"] + len(data["content"])
-        reactions = Reaction.objects.filter(
+        reactions = HighlightedReaction.objects.filter(
             article=data["article"],
             topic=data["topic"],
             owner=data["owner"],
@@ -43,7 +74,7 @@ class HighlightedReactionSerializer(serializers.HyperlinkedModelSerializer):
         return data
 
     class Meta:
-        model = Reaction
+        model = HighlightedReaction
         fields = (
             "article",
             "topic",

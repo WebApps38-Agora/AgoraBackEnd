@@ -2,11 +2,17 @@ from collections import defaultdict
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, viewsets
 
-from metrics.models import HighlightedReaction
+from metrics.models import ArticleReaction, HighlightedReaction
 from metrics.serializers import (ArticleMetric, ArticleMetricsSerializer,
+                                 ArticleReactionSerializer,
                                  HighlightedReactionSerializer)
 from topics.models import Article
 from utils.fenwick_tree import FenwickTree
+
+
+class ArticleReactionViewset(viewsets.ModelViewSet):
+    queryset = ArticleReaction.objects.all()
+    serializer_class = ArticleReactionSerializer
 
 
 class HighlightedReactionViewset(viewsets.ModelViewSet):
