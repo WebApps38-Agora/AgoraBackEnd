@@ -1,4 +1,5 @@
 from collections import defaultdict
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, viewsets
 
@@ -72,3 +73,25 @@ class ArticleHighlightedMetricsAPIView(generics.RetrieveAPIView):
         }
 
         return ArticleMetric(**reaction_counts)
+
+
+class ArticleMetricsAPIView(generics.RetrieveAPIView):
+    """
+    Retrieve %s of article bias/facts/opinions/etc from article-wide reactions
+    """
+    queryset = ArticleReaction.objects.all()
+    serializer_class = ArticleMetricsSerializer
+    lookup_field = "article"
+
+    def get_object(self):
+        article_pk = self.kwargs[self.lookup_field]
+        article = get_object_or_404(Article, pk=article_pk)
+        metric = self.get_queryset().filter(
+            article=article
+        ).aggregate(
+            bias=Avg("bias_percent"),
+            fact=Avg("fact_percent"),
+            fake=Avg("fake_percent"),
+        )
+
+        return ArticleMetric(**metric)

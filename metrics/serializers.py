@@ -103,6 +103,6 @@ class ArticleMetric():
 
 
 class ArticleMetricsSerializer(serializers.Serializer):
-    bias = serializers.IntegerField()
-    fact = serializers.IntegerField()
-    fake = serializers.IntegerField()
+    bias = serializers.FloatField()
+    fact = serializers.FloatField()
+    fake = serializers.FloatField()
