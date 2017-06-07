@@ -6,9 +6,6 @@ from topics.models import Article, Source, Topic
 from topics.serializers import (ArticleSerializer, SourceSerializer,
                                 TopicSerializer)
 
-import topics.newsapi as newsapi
-import topics.semantic as semantic
-
 
 class TopicsAppPermission(permissions.BasePermission):
     message = "Only an admin can add topics / articles / sources"
@@ -50,10 +47,3 @@ class TopicViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return sorted(Topic.objects.all(), key=lambda t: t.ranking, reverse=True)
-
-
-class UpdateNews(APIView):
-    def get(request, pk, format=None):
-        newsapi.update_article_database(['bbc-news', 'the-guardian-uk', 'daily-mail'])
-        semantic.create_all_topics()
-        return Response(status=200)
