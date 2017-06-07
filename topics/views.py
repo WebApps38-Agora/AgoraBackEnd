@@ -46,4 +46,7 @@ class TopicViewSet(viewsets.ModelViewSet):
     permission_classes = (TopicsAppPermission,)
 
     def get_queryset(self):
-        return sorted(Topic.objects.all(), key=lambda t: t.ranking, reverse=True)
+        if self.action == 'list':
+            return sorted(Topic.objects.all(), key=lambda t: t.ranking, reverse=True)
+        else:
+            return Topic.objects.all()
