@@ -1,6 +1,5 @@
 from gensim import corpora, models, similarities
 from topics.models import Article, Topic
-from collections import defaultdict
 
 SIMILARITY_THRESHOLD = 0.25
 
@@ -18,6 +17,7 @@ def create_all_topics():
     '''Creates/updates topics based on all the articles currently in the DB.'''
 
     create_topics(None)
+
 
 def create_topics(new_articles):
     '''Creates/updates topics based the given articles, which should have
@@ -37,7 +37,7 @@ def create_topics(new_articles):
     corpus_tfidf = tfidf[corpus]
 
     # Create an LSI model based on the TFIDF model
-    lsi = models.LsiModel(corpus_tfidf, id2word=corpus.dictionary, num_topics=len(headlines))
+    lsi = models.LsiModel(corpus_tfidf, id2word=corpus.dictionary, num_topics=Topic.objects.count() or len(headlines))
     corpus_lsi = lsi[corpus]
 
     # Create a similarity matrix and a table of all similarities
