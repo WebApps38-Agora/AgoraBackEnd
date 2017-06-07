@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from topics.models import Article, Topic
+from topics.models import Article
 
 
 class Reaction(models.Model):
@@ -9,7 +9,6 @@ class Reaction(models.Model):
     Base abstract class for reactions
     """
     article = models.ForeignKey(Article)
-    topic = models.ForeignKey(Topic)
     owner = models.ForeignKey(User)
 
     class Meta:

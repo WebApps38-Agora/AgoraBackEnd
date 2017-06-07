@@ -6,7 +6,7 @@ from rest_framework.serializers import ValidationError
 from metrics.models import ArticleReaction, HighlightedReaction
 from metrics.serializers import (ArticleReactionSerializer,
                                  HighlightedReactionSerializer)
-from metrics.views import ArticleMetricsAPIView
+from metrics.views import ArticleMetricsViewSet
 from topics.models import Article, Source, Topic
 
 
@@ -25,7 +25,6 @@ class HighlightedReactionSerializerTest(TestCase):
 
         reaction = HighlightedReaction(
             article=self.a,
-            topic=self.t,
             owner=self.u,
             location=0,
             content="This is a test",
@@ -37,7 +36,6 @@ class HighlightedReactionSerializerTest(TestCase):
     def test_cant_react_to_same_thing_twice(self):
         data = {
             'article': self.a,
-            'topic': self.t,
             'owner': self.u,
             'location': 0,
             'content': "This is a test",
@@ -51,7 +49,6 @@ class HighlightedReactionSerializerTest(TestCase):
     def test_cant_react_to_subset_of_already_reacted(self):
         data = {
             'article': self.a,
-            'topic': self.t,
             'owner': self.u,
             'location': 5,
             'content': "is a test",
@@ -65,7 +62,6 @@ class HighlightedReactionSerializerTest(TestCase):
     def test_cant_react_to_intersection_of_already_reacted(self):
         data = {
             'article': self.a,
-            'topic': self.t,
             'owner': self.u,
             'location': 5,
             'content': "is a test too",
@@ -79,7 +75,6 @@ class HighlightedReactionSerializerTest(TestCase):
     def test_can_react_differently_to_same_text(self):
         data = {
             'article': self.a,
-            'topic': self.t,
             'owner': self.u,
             'location': 0,
             'content': "This is a test",
@@ -96,7 +91,6 @@ class HighlightedReactionSerializerTest(TestCase):
     def test_can_react_to_disjoint_content(self):
         data = {
             'article': self.a,
-            'topic': self.t,
             'owner': self.u,
             'location': 20,
             'content': "This is also a test",
@@ -127,9 +121,6 @@ class ArticleReactionSerializerTest(TestCase):
     def test_cant_react_to_article_twice(self):
         data = {
             "owner": self.u.id,
-            "topic": reverse(
-                'topic-detail', args=[self.t.id]
-            ),
             "article": reverse(
                 'article-detail', args=[self.a.id]
             ),
@@ -148,9 +139,6 @@ class ArticleReactionSerializerTest(TestCase):
     def test_sum_of_percent_has_to_add_up_to_100(self):
         data = {
             "owner": self.u.id,
-            "topic": reverse(
-                'topic-detail', args=[self.t.id]
-            ),
             "article": reverse(
                 'article-detail', args=[self.a.id]
             ),
@@ -167,7 +155,7 @@ class ArticleReactionSerializerTest(TestCase):
         )
 
 
-class ArticleMetricsAPIViewTest(TestCase):
+class ArticleMetricsViewSetTest(TestCase):
 
     def setUp(self):
         p = Source(name="Test Paper")
@@ -184,15 +172,15 @@ class ArticleMetricsAPIViewTest(TestCase):
 
     def test_get_object_returns_avg(self):
         ArticleReaction(
-            owner=self.u1, article=self.a, topic=self.t,
+            owner=self.u1, article=self.a,
             bias_percent=20, fact_percent=20, fake_percent=60
         ).save()
         ArticleReaction(
-            owner=self.u2, article=self.a, topic=self.t,
+            owner=self.u2, article=self.a,
             bias_percent=40, fact_percent=40, fake_percent=20
         ).save()
 
-        view = ArticleMetricsAPIView(kwargs={"article": 1})
+        view = ArticleMetricsViewSet(kwargs={"article": 1})
         metric = view.get_object()
 
         self.assertEqual(metric.bias, 30)

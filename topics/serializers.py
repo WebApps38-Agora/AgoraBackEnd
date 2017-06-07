@@ -1,8 +1,11 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 from topics.models import Article, Source, Topic
 
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+    metrics = serializers.SerializerMethodField()
+
     class Meta:
         model = Article
         fields = (
@@ -13,9 +16,17 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
             "url",
             "url_image",
             "published_at",
+            "metrics",
 
             "source",
             "topic",
+        )
+
+    def get_metrics(self, obj):
+        return reverse(
+            'metrics-detail',
+            args=[obj.id],
+            request=self.context.get("request")
         )
 
 

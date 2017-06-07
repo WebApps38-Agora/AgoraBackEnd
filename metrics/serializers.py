@@ -30,7 +30,6 @@ class ArticleReactionSerializer(serializers.HyperlinkedModelSerializer):
         model = ArticleReaction
         fields = (
             "article",
-            "topic",
             "owner",
             "bias_percent",
             "fact_percent",
@@ -55,7 +54,6 @@ class HighlightedReactionSerializer(serializers.HyperlinkedModelSerializer):
         data["content_end"] = data["location"] + len(data["content"])
         reactions = HighlightedReaction.objects.filter(
             article=data["article"],
-            topic=data["topic"],
             owner=data["owner"],
             reaction=data["reaction"],
         )
@@ -86,7 +84,6 @@ class HighlightedReactionSerializer(serializers.HyperlinkedModelSerializer):
         model = HighlightedReaction
         fields = (
             "article",
-            "topic",
             "owner",
             "location",
             "content",
