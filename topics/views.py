@@ -44,3 +44,6 @@ class TopicViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
     permission_classes = (TopicsAppPermission,)
+
+    def get_queryset(self):
+        return sorted(Topic.objects.all(), key=lambda t: t.ranking, reverse=True)

@@ -19,7 +19,7 @@ class HighlightedReactionSerializerTest(TestCase):
         self.t.save()
         self.a = Article(headline="Test", url="http://test.com", source=p)
         self.a.save()
-        self.a.topics.add(self.t)
+        self.a.topic = self.t
         self.u = User(username="test")
         self.u.save()
 
@@ -120,7 +120,7 @@ class ArticleReactionSerializerTest(TestCase):
         self.t.save()
         self.a = Article(headline="Test", url="http://test.com", source=p)
         self.a.save()
-        self.a.topics.add(self.t)
+        self.a.topic = self.t
         self.u = User(username="test")
         self.u.save()
 
@@ -176,7 +176,7 @@ class ArticleMetricsAPIViewTest(TestCase):
         self.t.save()
         self.a = Article(headline="Test", url="http://test.com", source=p)
         self.a.save()
-        self.a.topics.add(self.t)
+        self.a.topic = self.t
         self.u1 = User(username="test")
         self.u1.save()
         self.u2 = User(username="test2")

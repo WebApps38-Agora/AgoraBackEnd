@@ -1,28 +1,9 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-from topics.models import Article, Source, Topic
+from topics.models import Article, Topic
 
 import topics.newsapi as newsapi
 import topics.semantic as semantic
-
-class ArticleTest(TestCase):
-
-    def setUp(self):
-        self.p = Source(name="The Test Paper")
-        self.p.save()
-        self.a1 = Article(headline="Test1", url="www.test.com", source=self.p)
-        self.a2 = Article(headline="Test2", url="www.test.com", source=self.p)
-        self.a1.save()
-        self.a2.save()
-
-    def test_article_can_have_more_than_one_topic(self):
-        t1 = Topic()
-        t2 = Topic()
-        t1.save()
-        t2.save()
-
-        self.a1.topics.add(t1)
-        self.a1.topics.add(t2)
 
 
 class APITest(TestCase):
@@ -75,41 +56,66 @@ class NewsApiTest(TestCase):
 
 
 class TopicsTest(TestCase):
+
     def setUp(self):
-        self.s = Source(name="Some Paper")
-        self.s.save()
-        self.articles = [None]*7
-        self.articles[0] = Article(url='1', headline="Theresa May calls snap election")
-        self.articles[1] = Article(url='2', headline="Theresa May announces snap election")
-        self.articles[2] = Article(url='3', headline="May surprises the UK with an election")
-        self.articles[3] = Article(url='4', headline="Turkish president accused of fabricating army coup")
-        self.articles[4] = Article(url='5', headline="Recent Turkish coup to strengthen Erdogan's position")
-        self.articles[5] = Article(url='6', headline="Turkish mafia on the rise")
-        self.articles[6] = Article(url='7', headline="The UK to leave the european union")
-        for article in self.articles:
-            article.source = self.s
+        articles = [None]*7
+        articles[0] = Article(headline='Theresa May calls snap election')
+        articles[1] = Article(headline='Theresa May announces snap election')
+        articles[2] = Article(headline='May surprises the UK with an election')
+        articles[3] = Article(headline='Turkish president accused of fabricating army coup')
+        articles[4] = Article(headline='Recent Turkish coup to strengthen Erdogan\'s position')
+        articles[5] = Article(headline='Turkish mafia on the rise')
+        articles[6] = Article(headline='The UK to leave the european union')
+        for article in articles:
             article.save()
 
     def test_topics_created(self):
         semantic.create_all_topics()
         topics = Topic.objects.all()
+        articles = Article.objects.all()
 
         # There are 4 topics created, each one having the title of the first relvant article
         self.assertEqual(Topic.objects.count(), 4)
-        self.assertEqual(topics[0].title(), 'Theresa May calls snap election')
-        self.assertEqual(topics[1].title(), 'Turkish president accused of fabricating army coup')
-        self.assertEqual(topics[2].title(), 'Turkish mafia on the rise')
-        self.assertEqual(topics[3].title(), 'The UK to leave the european union')
+        self.assertEqual(topics[0].title, 'Theresa May calls snap election')
+        self.assertEqual(topics[1].title, 'Turkish president accused of fabricating army coup')
+        self.assertEqual(topics[2].title, 'Turkish mafia on the rise')
+        self.assertEqual(topics[3].title, 'The UK to leave the european union')
 
         # Theresa May election articles grouped together
-        self.assertEqual(self.articles[0].topics.all()[0], topics[0])
-        self.assertEqual(self.articles[1].topics.all()[0], topics[0])
-        self.assertEqual(self.articles[2].topics.all()[0], topics[0])
+        self.assertEqual(articles[0].topic, topics[0])
+        self.assertEqual(articles[1].topic, topics[0])
+        self.assertEqual(articles[2].topic, topics[0])
 
         # Turkish coup articles grouped together
-        self.assertEqual(self.articles[3].topics.all()[0], topics[1])
-        self.assertEqual(self.articles[4].topics.all()[0], topics[1])
+        self.assertEqual(articles[3].topic, topics[1])
+        self.assertEqual(articles[4].topic, topics[1])
 
         # The rest are seperate topics
-        self.assertEqual(self.articles[5].topics.all()[0], topics[2])
-        self.assertEqual(self.articles[6].topics.all()[0], topics[3])
+        self.assertEqual(articles[5].topic, topics[2])
+        self.assertEqual(articles[6].topic, topics[3])
+
+
+    def test_topics_updated(self):
+        self.test_topics_created()
+        
+        new_articles = [
+            Article(headline='Snap election might blow up in Theresa\'s face'),
+            Article(headline='Erdogan calls recent army coup a hoax'),
+            Article(headline='Computing student salaries are through the roof'),
+        ]
+
+        for article in new_articles:
+            article.save()
+
+        semantic.create_topics(new_articles)
+        topics = Topic.objects.all()
+
+        # Add Theresa May article to existing topic
+        self.assertEqual(new_articles[0].topic, topics[0])
+
+        # Add Erdogan article to existing topic
+        self.assertEqual(new_articles[1].topic, topics[1])
+
+        # Add Computing article to new topic
+        self.assertEqual(len(topics), 5)
+        self.assertEqual(new_articles[2].topic, topics[4])

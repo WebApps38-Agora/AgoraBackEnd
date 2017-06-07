@@ -11,10 +11,11 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
             "description",
             "content",
             "url",
-            "source",
-            "topics",
             "url_image",
-            "topic_id"
+            "published_at",
+
+            "source",
+            "topic",
         )
 
 
@@ -26,7 +27,7 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
             "name",
             "article_set",
             "url",
-            "url_logo"
+            "url_logo",
         )
 
 
@@ -35,6 +36,9 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
         model = Topic
         fields = (
             "id",
-            "date",
             "article_set",
+            "title",
+            "published_at",
+            "views",
+            "ranking",
         )

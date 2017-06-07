@@ -67,6 +67,7 @@ def update_article_database(allowed_source_ids):
                             defaults={'headline': article['title'],
                                       'description': article['description'],
                                       'url_image': article['urlToImage'],
+                                      'published_at': article['publishedAt'],
                                       'source': s})
 
 
