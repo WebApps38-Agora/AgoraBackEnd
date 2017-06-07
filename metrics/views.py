@@ -1,7 +1,7 @@
 from collections import defaultdict
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, viewsets
+from rest_framework import generics, mixins, viewsets
 
 from metrics.models import ArticleReaction, HighlightedReaction
 from metrics.serializers import (ArticleMetric, ArticleMetricsSerializer,
@@ -75,13 +75,22 @@ class ArticleHighlightedMetricsAPIView(generics.RetrieveAPIView):
         return ArticleMetric(**reaction_counts)
 
 
-class ArticleMetricsAPIView(generics.RetrieveAPIView):
+class ArticleMetricsViewSet(
+        mixins.CreateModelMixin,
+        mixins.RetrieveModelMixin,
+        viewsets.GenericViewSet):
     """
     Retrieve %s of article bias/facts/opinions/etc from article-wide reactions
     """
     queryset = ArticleReaction.objects.all()
     serializer_class = ArticleMetricsSerializer
     lookup_field = "article"
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return ArticleMetricsSerializer
+        else:
+            return ArticleReactionSerializer
 
     def get_object(self):
         article_pk = self.kwargs[self.lookup_field]
