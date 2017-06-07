@@ -23,9 +23,9 @@ class Topic(models.Model):
         negatively affects it.
 
         The negative contribution of the age increases exponentially,
-        while the positive contribution of views is a linear, scaled
-        such that a 1 week old topic which has solely been viewed has a ranking
-        of 0.
+        while the positive contribution of views is linear, scaled such that:
+        - A one-week old topic which has solely been viewed has a ranking of 1
+        - A brand new topic which has never been viewed also has a ranking of 1
 
         A scaling constant of 0.01 in the exponential is used to stretch the
         age falloff. Age is counted in hours.'''
@@ -34,7 +34,7 @@ class Topic(models.Model):
         total_views = Topic.total_topic_views()
         share_of_views = self.views / total_views if total_views > 0 else 0
 
-        return math.exp(0.01 * 24 * 7) * share_of_views - math.exp(0.01 * age)
+        return 1 + math.exp(0.01 * 24 * 7) * share_of_views - math.exp(0.01 * age)
 
 
     def __str__(self):
