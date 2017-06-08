@@ -32,19 +32,26 @@ def create_topics(new_articles):
     corpus_tfidf = tfidf[corpus]
 
     # Create an LSI model based on the TFIDF model
-    lsi = models.LsiModel(corpus_tfidf, id2word=corpus.dictionary, num_topics=len(headlines))
+    lsi = models.LsiModel(
+        corpus_tfidf,
+        id2word=corpus.dictionary,
+        num_topics=len(headlines)
+    )
     corpus_lsi = lsi[corpus]
 
     # Create a similarity matrix and a table of all similarities
     index = similarities.MatrixSimilarity(corpus_lsi)
-    similarity_table = index[[to_lsi_vector(corpus, lsi, tokenize(article.headline))
-                             for article in new_articles]]
+    similarity_table = index[[
+        to_lsi_vector(corpus, lsi, tokenize(article.headline))
+        for article in new_articles
+    ]]
 
     # Group and add to DB
     group_articles_using_similarities(articles, new_articles, similarity_table)
 
 
-def group_articles_using_similarities(articles, new_articles, similarity_table):
+def group_articles_using_similarities(
+        articles, new_articles, similarity_table):
     '''Takes a 2D table of similarities between articles, and groups them using
     similar ones under the same topics.'''
 
@@ -71,7 +78,7 @@ def group_articles_using_similarities(articles, new_articles, similarity_table):
         if sim_value > SIMILARITY_THRESHOLD:
             # Group the two together under the same, potentially new topic
             topic = similar_article.topic
-            if topic == None:
+            if topic is None:
                 topic = Topic()
                 topic.save()
 
@@ -94,7 +101,9 @@ def to_lsi_vector(corpus, lsi, tokenized_headline):
 
 
 def tokenize(text):
-    '''Extract the features from the article title, using bag-of-words method.'''
+    '''
+    Extract the features from the article title, using bag-of-words method.
+    '''
 
     stoplist = set('for a of the and to in'.split())
     return [word for word in text.lower().split() if word not in stoplist]

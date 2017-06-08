@@ -1,6 +1,4 @@
 from rest_framework import permissions, viewsets
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
 from topics.models import Article, Source, Topic
 from topics.serializers import (ArticleSerializer, SourceSerializer,
@@ -47,6 +45,8 @@ class TopicViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.action == 'list':
-            return sorted(Topic.objects.all(), key=lambda t: t.ranking, reverse=True)
+            return sorted(
+                Topic.objects.all(), key=lambda t: t.ranking, reverse=True
+            )
         else:
             return Topic.objects.all()

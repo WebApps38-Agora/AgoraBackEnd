@@ -1,11 +1,11 @@
 import requests
 import os
 from topics.models import Article, Source
-from collections import defaultdict
 
 NEWS_API_KEY = os.environ['NEWS_API_KEY']
 NEWS_API_ARTICLES = 'https://newsapi.org/v1/articles'
 NEWS_API_SOURCES = 'https://newsapi.org/v1/sources'
+
 
 class NewsApiError(Exception):
     pass
@@ -31,8 +31,10 @@ def get_newest_articles(source, sort_by='top'):
     if response['status'] == 'ok':
         return response['articles']
     else:
-        raise NewsApiError('Could not fetch articles for source {}, have you '
-                           'set the NEWS_API_KEY environment variable?'.format(source))
+        raise NewsApiError(
+            'Could not fetch articles for source {}, have you '
+            'set the NEWS_API_KEY environment variable?'
+        ).format(source)
 
 
 def get_all_sources(language='en'):
@@ -54,11 +56,13 @@ def update_article_database(allowed_source_ids):
         if source['id'] not in allowed_source_ids:
             continue
 
-        s, _ = Source.objects.get_or_create(id=source['id'],
-                                            name=source['name'],
-                                            url=source['url'],
-                                            description=source['description'],
-                                            url_logo=get_source_logo(source['url']))
+        s, _ = Source.objects.get_or_create(
+            id=source['id'],
+            name=source['name'],
+            url=source['url'],
+            description=source['description'],
+            url_logo=get_source_logo(source['url'])
+        )
         articles = get_newest_articles(s.id)
 
         for article in articles:
@@ -74,5 +78,9 @@ def update_article_database(allowed_source_ids):
 
     return new_articles
 
+
 def get_source_logo(url):
-    return 'https://icons.better-idea.org/icon?url={}&size=70..120..200'.format(url)
+    return (
+        'https://icons.better-idea.org/'
+        'icon?url={}&size=70..120..200'
+    ).format(url)
