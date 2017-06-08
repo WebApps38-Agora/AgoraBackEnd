@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from metrics import views as metric_views
 from topics import views as topic_views
+from facts import views as fact_views
 from django.contrib import admin
 
 router = routers.DefaultRouter()
@@ -16,4 +17,5 @@ router.register(
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
+    url(r'^facts/(?P<topic_pk>[0-9]+)/$', fact_views.FactList.as_view())
 ]
