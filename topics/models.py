@@ -30,7 +30,7 @@ class Topic(models.Model):
         A scaling constant of 0.01 in the exponential is used to stretch the
         age falloff. Age is counted in hours.'''
 
-        age = (timezone.now() - self.published_at).total_seconds() / 60
+        age = (timezone.now() - self.published_at).total_seconds() / 60 / 60
         total_views = Topic.total_topic_views()
         share_of_views = self.views / total_views if total_views > 0 else 0
 
