@@ -15,5 +15,7 @@ router.register(
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^rest_auth/', include('rest_auth.urls')),
+    url(r'^rest_auth/registration/', include('rest_auth.registration.urls')),
     url(r'^admin/', admin.site.urls),
 ]
