@@ -13,9 +13,10 @@ router.register(r'topics', topic_views.TopicViewSet)
 router.register(
     r'metrics', metric_views.ArticleMetricsViewSet, base_name="metrics"
 )
+router.register(r'facts', fact_views.FactViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^facts/(?P<topic_pk>[0-9]+)/$', fact_views.FactList.as_view())
+    url('^facts/topic/(?P<topic_id>[0-9]+)/$', fact_views.FactViewSet.as_view({'get': 'list'})),
 ]

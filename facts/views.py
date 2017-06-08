@@ -1,27 +1,21 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, viewsets
 from rest_framework.response import Response
 
-from facts.serializers import FactSerializer
-from facts.models import Fact
+from facts.serializers import FactSerializer, ReactionSerializer
+from facts.models import Fact, Reaction
 from topics.models import Topic
 
-class FactList(mixins.CreateModelMixin,
-               generics.GenericAPIView):
+class FactViewSet(viewsets.ModelViewSet):
     """
     Retrieve the stored facts for a given topic.
     """
     serializer_class = FactSerializer
     queryset = Fact.objects.all()
 
-
-    def get(self, request, topic_pk):
-        topic = get_object_or_404(Topic, pk=topic_pk)
-        facts = topic.fact_set
-        serializer = FactSerializer(facts, many=True, context={'request': request})
-        return Response(serializer.data)
-
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+    def get_queryset(self):
+        if 'topic_id' in self.kwargs:
+           return Fact.objects.filter(topic__id=self.kwargs['topic_id'])
+        else:
+           return Fact.objects.all()
