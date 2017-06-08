@@ -58,19 +58,19 @@ class NewsApiTest(TestCase):
 class TopicsTest(TestCase):
 
     def setUp(self):
-        articles = [None]*7
-        articles[0] = Article(headline='Theresa May calls snap election')
-        articles[1] = Article(headline='Theresa May announces snap election')
-        articles[2] = Article(headline='May surprises the UK with an election')
-        articles[3] = Article(headline='Turkish president accused of fabricating army coup')
-        articles[4] = Article(headline='Recent Turkish coup to strengthen Erdogan\'s position')
-        articles[5] = Article(headline='Turkish mafia on the rise')
-        articles[6] = Article(headline='The UK to leave the european union')
-        for article in articles:
+        self.articles = [None]*7
+        self.articles[0] = Article(headline='Theresa May calls snap election')
+        self.articles[1] = Article(headline='Theresa May announces snap election')
+        self.articles[2] = Article(headline='May surprises the UK with an election')
+        self.articles[3] = Article(headline='Turkish president accused of fabricating army coup')
+        self.articles[4] = Article(headline='Recent Turkish coup to strengthen Erdogan\'s position')
+        self.articles[5] = Article(headline='Turkish mafia on the rise')
+        self.articles[6] = Article(headline='The UK to leave the european union')
+        for article in self.articles:
             article.save()
 
     def test_topics_created(self):
-        semantic.create_all_topics()
+        semantic.create_topics(self.articles)
         topics = Topic.objects.all()
         articles = Article.objects.all()
 
@@ -97,7 +97,7 @@ class TopicsTest(TestCase):
 
     def test_topics_updated(self):
         self.test_topics_created()
-        
+
         new_articles = [
             Article(headline='Snap election might blow up in Theresa\'s face'),
             Article(headline='Erdogan calls recent army coup a hoax'),
@@ -108,14 +108,16 @@ class TopicsTest(TestCase):
             article.save()
 
         semantic.create_topics(new_articles)
+
         topics = Topic.objects.all()
+        articles = Article.objects.all()
 
         # Add Theresa May article to existing topic
-        self.assertEqual(new_articles[0].topic, topics[0])
+        self.assertEqual(articles[7].topic, topics[0])
 
         # Add Erdogan article to existing topic
-        self.assertEqual(new_articles[1].topic, topics[1])
+        self.assertEqual(articles[8].topic, topics[1])
 
         # Add Computing article to new topic
         self.assertEqual(len(topics), 5)
-        self.assertEqual(new_articles[2].topic, topics[4])
+        self.assertEqual(articles[9].topic, topics[4])

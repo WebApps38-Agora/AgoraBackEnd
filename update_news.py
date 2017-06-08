@@ -9,5 +9,8 @@ django.setup()
 from topics import newsapi
 from topics import semantic
 
-newsapi.update_article_database(['bbc-news', 'the-guardian-uk', 'daily-mail'])
-semantic.create_all_topics()
+sources = ['bbc-news', 'the-guardian-uk', 'daily-mail', 'cnn', 'the-new-york-times']
+
+for source in sources:
+    new_articles = newsapi.update_article_database([source])
+    semantic.create_topics(new_articles)
