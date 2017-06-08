@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # Our apps
     'topics',
     'metrics',
+    'facts',
 ]
 
 # Site id
