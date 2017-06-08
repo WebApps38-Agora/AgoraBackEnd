@@ -60,39 +60,37 @@ def group_articles_using_similarities(articles, new_articles, similarity_table):
     # matches the index of the new_articles array, and the second matches the
     # articles array.
     for article_id, sims in enumerate(similarity_table):
-        article = new_articles[article_id]
-
-        # Sort by similarity value
         sorted_sims = sorted(enumerate(sims), key=lambda item: -item[1])
 
-        # Extract those which are above the threshold
-        threshold_sims = [sim for sim in sorted_sims[1:] if sim[1] >= SIMILARITY_THRESHOLD]
+        # Take the second-highest similarity (which will be the most
+        # similar headline other than the same article itself)
+        similarity = sorted_sims[1]
 
-        # Get the topic which they belong to, or None if none of them have a topic
-        topic = next((articles[id].topic
-                      for id, _ in threshold_sims
-                      if articles[id].topic is not None), None)
+        # Extract value and ID as a result of enumerate()
+        similar_article_id = similarity[0]
+        sim_value = similarity[1]
 
-        for similar_article_id, sim_value in threshold_sims:
-            # Group all of these articles together under the same, potentially new topic
-            similar_article = articles[similar_article_id]
+        # Get actual article objects pointed to by the IDs
+        article = new_articles[article_id]
+        similar_article = articles[similar_article_id]
 
+        if sim_value > SIMILARITY_THRESHOLD:
+            # Group the two together under the same, potentially new topic
+            topic = similar_article.topic
             if topic == None:
                 topic = Topic()
                 topic.save()
 
             article.topic = topic
             similar_article.topic = topic
-            similar_article.save()
-
-        if not threshold_sims:
-            # If this article isn't similar to anything else before, create a
-            # new topic for just this article alone
+        else:
+            # Create a new topic for just this article alone
             topic = Topic()
             topic.save()
             article.topic = topic
 
         article.save()
+        similar_article.save()
 
 
 def to_lsi_vector(corpus, lsi, tokenized_headline):
