@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     # Our apps
     'topics',
     'metrics',
+    'facts',
 ]
 
 MIDDLEWARE = [
