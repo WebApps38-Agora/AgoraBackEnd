@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 import math
 
+
 class Topic(models.Model):
     """
     Definition of a news Topic.
@@ -9,11 +10,10 @@ class Topic(models.Model):
     published_at = models.DateTimeField(auto_now_add=True, blank=True)
     views = models.PositiveIntegerField(default=0)
 
-
     @property
     def title(self):
-        return self.article_set.all()[0].headline if self.article_set.count() > 0 else ''
-
+        return (self.article_set.all()[0].headline
+                if self.article_set.count() > 0 else '')
 
     @property
     def ranking(self):
@@ -34,12 +34,11 @@ class Topic(models.Model):
         total_views = Topic.total_topic_views()
         share_of_views = self.views / total_views if total_views > 0 else 0
 
-        return 1 + math.exp(0.01 * 24 * 7) * share_of_views - math.exp(0.01 * age)
-
+        return (1 + math.exp(0.01 * 24 * 7) *
+                share_of_views - math.exp(0.01 * age))
 
     def __str__(self):
         return self.title
-
 
     @staticmethod
     def total_topic_views():
@@ -69,11 +68,9 @@ class Article(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True)
     source = models.ForeignKey(Source, on_delete=models.CASCADE, null=True)
 
-
     def save(self, *args, **kwargs):
         self.content_len = len(self.content)
         super().save(*args, **kwargs)
-
 
     def __str__(self):
         return self.headline
