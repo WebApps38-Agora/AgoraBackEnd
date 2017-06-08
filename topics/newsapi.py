@@ -48,8 +48,8 @@ def update_article_database(allowed_source_ids):
     '''Queries the News API for latest articles, discovering new ones and adding
     them to the database.'''
 
+    new_articles = []
     news_sources = get_all_sources()
-
     for source in news_sources:
         if source['id'] not in allowed_source_ids:
             continue
@@ -62,14 +62,17 @@ def update_article_database(allowed_source_ids):
         articles = get_newest_articles(s.id)
 
         for article in articles:
-            a, _ = Article.objects.get_or_create(
+            a, created = Article.objects.get_or_create(
                             url=article['url'],
                             defaults={'headline': article['title'],
                                       'description': article['description'],
                                       'url_image': article['urlToImage'],
                                       'published_at': article['publishedAt'],
                                       'source': s})
+            if created:
+                new_articles.append(a)
 
+    return new_articles
 
 def get_source_logo(url):
     return 'https://icons.better-idea.org/icon?url={}&size=70..120..200'.format(url)
