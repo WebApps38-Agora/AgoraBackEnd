@@ -1,6 +1,5 @@
 from gensim import corpora, models, similarities
 from topics.models import Article, Topic
-from collections import defaultdict
 
 SIMILARITY_THRESHOLD = 0.25
 
@@ -14,19 +13,15 @@ class ArticleCorpus(corpora.TextCorpus):
         return len(self.input)
 
 
-def create_all_topics():
-    '''Creates/updates topics based on all the articles currently in the DB.'''
-
-    create_topics(None)
-
 def create_topics(new_articles):
     '''Creates/updates topics based the given articles, which should have
     already been added to the database.'''
 
-    articles = Article.objects.all()
+    if not new_articles:
+        return
 
-    if new_articles is None:
-        new_articles = articles
+    articles = Article.objects.all()
+    new_articles = [article for article in articles if article in new_articles]
 
     # Create a corpus using tokenized headlines
     headlines = [article.headline for article in articles]
@@ -51,8 +46,7 @@ def create_topics(new_articles):
 
 def group_articles_using_similarities(articles, new_articles, similarity_table):
     '''Takes a 2D table of similarities between articles, and groups them using
-    a dictionary mapping article IDs to a set of all articles which should be
-    placed under the same topic.'''
+    similar ones under the same topics.'''
 
     # sims contains a list of similarity values in the range 0 to 1, between
     # all pairs of articles. Therefore, similarity_table[i][i] = 1 for all i,
