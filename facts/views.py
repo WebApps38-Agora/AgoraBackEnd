@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from facts.serializers import FactSerializer, ReactionSerializer
-from facts.models import Fact, Reaction
+from facts.models import Fact, FactReaction
 
 class FactViewSet(viewsets.ModelViewSet):
     """
@@ -17,12 +17,12 @@ class FactViewSet(viewsets.ModelViewSet):
            return Fact.objects.all()
 
 
-class ReactionViewSet(viewsets.ModelViewSet):
+class FactReactionViewSet(viewsets.ModelViewSet):
     serializer_class = ReactionSerializer
-    queryset = Reaction.objects.all()
+    queryset = FactReaction.objects.all()
 
     def get_queryset(self):
         if 'fact_id' in self.kwargs:
-           return Reaction.objects.filter(fact__id=self.kwargs['fact_id'])
+           return FactReaction.objects.filter(fact__id=self.kwargs['fact_id'])
         else:
-           return Reaction.objects.all()
+           return FactReaction.objects.all()

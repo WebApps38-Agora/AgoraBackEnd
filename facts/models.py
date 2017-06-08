@@ -11,12 +11,12 @@ class Fact(models.Model):
     @property
     def score(self):
         score = 0
-        for reaction in self.reaction_set.all():
+        for reaction in self.factreaction_set.all():
             score += 1 if reaction.is_upvote else -1
         return score
 
 
-class Reaction(models.Model):
+class FactReaction(models.Model):
     fact = models.ForeignKey(Fact, on_delete=models.CASCADE)
     owner = models.ForeignKey(User)
     is_upvote = models.BooleanField(default=False)

@@ -14,7 +14,7 @@ router.register(
     r'metrics', metric_views.ArticleMetricsViewSet, base_name="metrics"
 )
 router.register(r'facts', fact_views.FactViewSet)
-router.register(r'fact_reactions', fact_views.ReactionViewSet)
+router.register(r'fact_reactions', fact_views.FactReactionViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
@@ -22,5 +22,5 @@ urlpatterns = [
     url('^facts/topic/(?P<topic_id>[0-9]+)/$',
         fact_views.FactViewSet.as_view({'get': 'list'})),
     url('^fact_reactions/fact/(?P<fact_id>[0-9]+)/$',
-        fact_views.ReactionViewSet.as_view({'get': 'list'})),
+        fact_views.FactReactionViewSet.as_view({'get': 'list'})),
 ]

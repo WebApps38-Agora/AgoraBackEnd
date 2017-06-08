@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 
-from facts.models import Fact, Reaction
+from facts.models import Fact, FactReaction
 from topics.models import Topic
 
 class FactTest(TestCase):
@@ -21,9 +21,9 @@ class FactTest(TestCase):
         fact.save()
 
         reactions = [None]*3
-        reactions[0] = Reaction(owner=self.u2, fact=fact, is_upvote=True)
-        reactions[1] = Reaction(owner=self.u2, fact=fact, is_upvote=True)
-        reactions[2] = Reaction(owner=self.u2, fact=fact, is_upvote=False)
+        reactions[0] = FactReaction(owner=self.u2, fact=fact, is_upvote=True)
+        reactions[1] = FactReaction(owner=self.u2, fact=fact, is_upvote=True)
+        reactions[2] = FactReaction(owner=self.u2, fact=fact, is_upvote=False)
         for reaction in reactions:
             reaction.save()
 
