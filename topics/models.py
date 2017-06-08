@@ -37,6 +37,10 @@ class Topic(models.Model):
         return (1 + math.exp(0.01 * 24 * 7) *
                 share_of_views - math.exp(0.01 * age))
 
+    @property
+    def article_images(self):
+        return [article.url_image for article in self.article_set.all()]
+
     def __str__(self):
         return self.title
 
