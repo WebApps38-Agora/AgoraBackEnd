@@ -14,21 +14,18 @@ class APITest(TestCase):
         userclient = APIClient()
 
         for entry_point in self.entry_points:
-            assert(
+            self.assertEqual(
                 userclient.delete(
                     '/{}/1/'.format(entry_point)
-                ).status_code == 403
-            )
-            assert(
+                ).status_code, 401)
+            self.assertEqual(
                 userclient.post(
                     '/{}/'.format(entry_point), {}
-                ).status_code == 403
-            )
-            assert(
+                ).status_code, 401)
+            self.assertEqual(
                 userclient.patch(
                     '/{}/1/'.format(entry_point), {}
-                ).status_code == 403
-            )
+                ).status_code, 401)
 
 
 class NewsApiTest(TestCase):
