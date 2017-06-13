@@ -14,9 +14,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = (
             "username",
+            "user",
             "profile_picture",
             "alignment",
             "profession",
             "town",
             "country",
         )
+        extra_kwargs = {"user": {"write_only": True}}
