@@ -10,10 +10,14 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "id",
             "name",
-            "article_set",
             "url",
             "url_logo",
         )
+
+
+class NestedSourceSerializer(SourceSerializer):
+    class Meta(SourceSerializer.Meta):
+        fields = SourceSerializer.Meta.fields + ("article_set",)
 
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
@@ -45,17 +49,28 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
-    article_set = ArticleSerializer(many=True)
-    fact_set = FactSerializer(many=True)
+    images = serializers.SlugRelatedField(
+        source="article_set",
+        many=True,
+        read_only=True,
+        slug_field="url_image",
+    )
 
     class Meta:
         model = Topic
         fields = (
             "id",
-            "article_set",
-            "fact_set",
             "title",
             "published_at",
+            "images",
             "views",
             "ranking",
         )
+
+
+class NestedTopicSerializer(TopicSerializer):
+    article_set = ArticleSerializer(many=True)
+    fact_set = FactSerializer(many=True)
+
+    class Meta(TopicSerializer.Meta):
+        fields = TopicSerializer.Meta.fields + ("article_set", "fact_set")
