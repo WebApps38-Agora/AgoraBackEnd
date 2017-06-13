@@ -67,3 +67,10 @@ class TopicViewSet(viewsets.ModelViewSet):
             obj = self.get_queryset().get(id=obj.id)
 
         return obj
+
+
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter

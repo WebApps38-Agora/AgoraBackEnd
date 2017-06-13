@@ -20,9 +20,11 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^rest_auth/', include('rest_auth.urls')),
     url(r'^rest_auth/registration/', include('rest_auth.registration.urls')),
+    url(r'^rest_auth/facebook/$', topic_views.FacebookLogin.as_view(), name='fb_login'),
     url(r'^admin/', admin.site.urls),
     url('^facts/topic/(?P<topic_id>[0-9]+)/$',
         fact_views.FactViewSet.as_view({'get': 'list'})),
     url('^fact_reactions/fact/(?P<fact_id>[0-9]+)/$',
         fact_views.FactReactionViewSet.as_view({'get': 'list'})),
+
 ]
