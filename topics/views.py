@@ -1,8 +1,8 @@
 from rest_framework import permissions, viewsets
 
 from topics.models import Article, Source, Topic
-from topics.serializers import (ArticleSerializer, NestedTopicSerializer,
-                                SourceSerializer, TopicSerializer)
+from topics.serializers import (ArticleSerializer, NestedSourceSerializer,
+                                NestedTopicSerializer, TopicSerializer)
 
 
 class TopicsAppPermission(permissions.BasePermission):
@@ -31,7 +31,7 @@ class SourceViewSet(viewsets.ModelViewSet):
     API endpoint for sources
     """
     queryset = Source.objects.all()
-    serializer_class = SourceSerializer
+    serializer_class = NestedSourceSerializer
     permission_classes = (TopicsAppPermission,)
 
 

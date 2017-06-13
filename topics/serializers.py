@@ -10,10 +10,14 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "id",
             "name",
-            "article_set",
             "url",
             "url_logo",
         )
+
+
+class NestedSourceSerializer(SourceSerializer):
+    class Meta(SourceSerializer.Meta):
+        fields = SourceSerializer.Meta.fields + ("article_set",)
 
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
