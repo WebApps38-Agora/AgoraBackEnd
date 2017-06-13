@@ -1,3 +1,4 @@
+from django.db.models import F
 from rest_framework import permissions, viewsets
 
 from topics.models import Article, Source, Topic
@@ -50,3 +51,14 @@ class TopicViewSet(viewsets.ModelViewSet):
             )
         else:
             return Topic.objects.all()
+
+    def get_object(self):
+        obj = super().get_object()
+
+        # If we're retrieving one topic, add 1 to views
+        if self.action == "retrieve":
+            obj.views = F('views') + 1
+            obj.save()
+            obj = self.get_queryset().get(id=obj.id)
+
+        return obj
