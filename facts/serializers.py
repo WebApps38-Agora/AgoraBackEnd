@@ -5,6 +5,7 @@ from rest_framework.validators import UniqueTogetherValidator
 
 from facts.models import FactReaction, Fact
 
+
 class ReactionSerializer(serializers.HyperlinkedModelSerializer):
     # TODO: remove next line when user API implemented
     owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -16,6 +17,7 @@ class ReactionSerializer(serializers.HyperlinkedModelSerializer):
             "owner",
             "is_upvote",
         )
+        extra_kwargs = {"owner": {"write_only": True}}
         validators = [
             UniqueTogetherValidator(
                 queryset=FactReaction.objects.all(),
@@ -32,8 +34,9 @@ class FactSerializer(serializers.HyperlinkedModelSerializer):
         model = Fact
         fields = (
             "topic",
-            "content",
             "owner",
+            "content",
             "factreaction_set",
             "score",
         )
+        extra_kwargs = {"owner": {"write_only": True}}
