@@ -1,8 +1,8 @@
 from rest_framework import permissions, viewsets
 
 from topics.models import Article, Source, Topic
-from topics.serializers import (ArticleSerializer, SourceSerializer,
-                                TopicSerializer)
+from topics.serializers import (ArticleSerializer, NestedTopicSerializer,
+                                SourceSerializer, TopicSerializer)
 
 
 class TopicsAppPermission(permissions.BasePermission):
@@ -40,8 +40,13 @@ class TopicViewSet(viewsets.ModelViewSet):
     API endpoint for topics
     """
     queryset = Topic.objects.all()
-    serializer_class = TopicSerializer
     permission_classes = (TopicsAppPermission,)
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return TopicSerializer
+        else:
+            return NestedTopicSerializer
 
     def get_queryset(self):
         if self.action == 'list':

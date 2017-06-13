@@ -45,17 +45,20 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
-    article_set = ArticleSerializer(many=True)
-    fact_set = FactSerializer(many=True)
-
     class Meta:
         model = Topic
         fields = (
             "id",
-            "article_set",
-            "fact_set",
             "title",
             "published_at",
             "views",
             "ranking",
         )
+
+
+class NestedTopicSerializer(TopicSerializer):
+    article_set = ArticleSerializer(many=True)
+    fact_set = FactSerializer(many=True)
+
+    class Meta(TopicSerializer.Meta):
+        fields = TopicSerializer.Meta.fields + ("article_set", "fact_set")
