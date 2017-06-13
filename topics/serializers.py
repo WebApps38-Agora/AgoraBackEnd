@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from topics.models import Article, Source, Topic
+from facts.serializers import FactSerializer
 
 
 class SourceSerializer(serializers.HyperlinkedModelSerializer):
@@ -45,12 +46,14 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
     article_set = ArticleSerializer(many=True)
+    fact_set = FactSerializer(many=True)
 
     class Meta:
         model = Topic
         fields = (
             "id",
             "article_set",
+            "fact_set",
             "title",
             "published_at",
             "views",
