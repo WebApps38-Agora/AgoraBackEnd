@@ -3,8 +3,21 @@ from rest_framework.reverse import reverse
 from topics.models import Article, Source, Topic
 
 
+class SourceSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Source
+        fields = (
+            "id",
+            "name",
+            "article_set",
+            "url",
+            "url_logo",
+        )
+
+
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
     metrics = serializers.SerializerMethodField()
+    source = SourceSerializer()
 
     class Meta:
         model = Article
@@ -30,19 +43,9 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class SourceSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Source
-        fields = (
-            "id",
-            "name",
-            "article_set",
-            "url",
-            "url_logo",
-        )
-
-
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
+    article_set = ArticleSerializer(many=True)
+
     class Meta:
         model = Topic
         fields = (
@@ -52,5 +55,4 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
             "published_at",
             "views",
             "ranking",
-            "article_images"
         )
