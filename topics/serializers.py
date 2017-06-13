@@ -49,12 +49,20 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
+    images = serializers.SlugRelatedField(
+        source="article_set",
+        many=True,
+        read_only=True,
+        slug_field="url_image",
+    )
+
     class Meta:
         model = Topic
         fields = (
             "id",
             "title",
             "published_at",
+            "images",
             "views",
             "ranking",
         )
