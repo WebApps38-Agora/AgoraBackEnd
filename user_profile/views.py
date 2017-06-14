@@ -19,16 +19,12 @@ class ProfilePermission(permissions.IsAuthenticated):
         return super().has_permission(request, view)
 
 
-class ProfileViewSet(mixins.CreateModelMixin,
-                     mixins.RetrieveModelMixin,
+class ProfileViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (ProfilePermission,)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
     def list(self, request):
         serializer = self.get_serializer(request.user.profile)
