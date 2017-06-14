@@ -23,7 +23,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "town",
             "country",
         )
-        read_only_fields = "id"
+        read_only_fields = ("id",)
         extra_kwargs = {
             "user": {
                 "write_only": True,
