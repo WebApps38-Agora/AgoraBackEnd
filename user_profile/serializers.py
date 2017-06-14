@@ -13,6 +13,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = (
+            "id",
             "username",
             "user",
             "profile_picture",
@@ -22,6 +23,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "town",
             "country",
         )
+        read_only_fields = "id"
         extra_kwargs = {
             "user": {
                 "write_only": True,
