@@ -25,7 +25,7 @@ class Profile(models.Model):
     dispatch_uid="Add blank profile",
 )
 def add_blank_profile(sender, instance, **kwargs):
-    if instance.profile is None:
+    if not hasattr(instance, 'profile'):
         profile = Profile(user=instance)
         profile.save()
         instance.profile = profile
