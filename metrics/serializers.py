@@ -1,5 +1,4 @@
-from math import isclose
-
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -15,15 +14,12 @@ class ArticleReactionSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """
-        Checks that sum of different fields = 100
+        Checks that bias has valid percentage
         """
-        total_sum = (
-            data["bias_percent"] + data["fact_percent"] + data["fake_percent"]
-        )
 
-        if not isclose(total_sum, 100, rel_tol=1e-5):
+        if data["bias"] < 0 or data["bias"] > 100:
             raise serializers.ValidationError(
-                "Total percentage of metrics should add up to 100"
+                "Invalid bias percentage"
             )
 
         return data
@@ -34,9 +30,7 @@ class ArticleReactionSerializer(serializers.ModelSerializer):
             "article",
             "owner",
             "owner_profile",
-            "bias_percent",
-            "fact_percent",
-            "fake_percent",
+            "bias",
         )
         extra_kwargs = {
             "owner": {
@@ -53,13 +47,9 @@ class ArticleReactionSerializer(serializers.ModelSerializer):
 
 
 class ArticleMetric():
-    def __init__(self, bias=None, fact=None, fake=None, opinion=None):
+    def __init__(self, bias=None):
         self.bias = bias or 0
-        self.fact = fact or 0
-        self.fake = fake or 0
 
 
 class ArticleMetricsSerializer(serializers.Serializer):
     bias = serializers.FloatField()
-    fact = serializers.FloatField()
-    fake = serializers.FloatField()
