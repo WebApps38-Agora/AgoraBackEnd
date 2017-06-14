@@ -9,7 +9,8 @@ def profile_pic_path(instance, filename):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    alignment = models.CharField(max_length=30)
+    political_x = models.IntegerField()
+    political_y = models.IntegerField()
     profession = models.CharField(max_length=30)
     town = models.CharField(max_length=30)
     country = models.CharField(max_length=30)
