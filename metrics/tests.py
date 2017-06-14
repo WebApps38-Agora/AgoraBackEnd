@@ -25,12 +25,8 @@ class ArticleReactionSerializerTest(TestCase):
     def test_cant_react_to_article_twice(self):
         data = {
             "owner": self.u.id,
-            "article": reverse(
-                'article-detail', args=[self.a.id]
-            ),
-            "bias_percent": 33.33,
-            "fact_percent": 33.33,
-            "fake_percent": 33.34,
+            "article": self.a.id,
+            "bias": 33.33,
         }
 
         serializer = ArticleReactionSerializer(data=data)
@@ -40,16 +36,21 @@ class ArticleReactionSerializerTest(TestCase):
         serializer = ArticleReactionSerializer(data=data)
         self.assertFalse(serializer.is_valid())
 
-    def test_sum_of_percent_has_to_add_up_to_100(self):
+    def test_bias_percentage_has_to_be_valid(self):
         data = {
             "owner": self.u.id,
-            "article": reverse(
-                'article-detail', args=[self.a.id]
-            ),
-            "bias_percent": 10.33,
-            "fact_percent": 33.33,
-            "fake_percent": 33.34,
+            "article": 'article-detail',
+            "bias": -1,
         }
+
+        serializer = ArticleReactionSerializer(data=data)
+        self.assertRaises(
+            ValidationError,
+            serializer.is_valid,
+            {'raise_exception': True}
+        )
+
+        data["bias"] = 101
 
         serializer = ArticleReactionSerializer(data=data)
         self.assertRaises(
@@ -77,16 +78,14 @@ class ArticleMetricsViewSetTest(TestCase):
     def test_get_object_returns_avg(self):
         ArticleReaction(
             owner=self.u1, article=self.a,
-            bias_percent=20, fact_percent=20, fake_percent=60
+            bias=20,
         ).save()
         ArticleReaction(
             owner=self.u2, article=self.a,
-            bias_percent=40, fact_percent=40, fake_percent=20
+            bias=40,
         ).save()
 
         view = ArticleMetricsViewSet(kwargs={"article": 1})
         metric = view.get_object()
 
         self.assertEqual(metric.bias, 30)
-        self.assertEqual(metric.fake, 40)
-        self.assertEqual(metric.fact, 30)

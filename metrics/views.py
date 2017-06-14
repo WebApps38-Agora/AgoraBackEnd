@@ -2,11 +2,14 @@ from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import detail_route
+from rest_framework.response import Response
 
 from metrics.models import ArticleReaction
 from metrics.serializers import (ArticleMetric, ArticleMetricsSerializer,
                                  ArticleReactionSerializer)
 from topics.models import Article
+from user_profile.models import Profile
 
 
 class ArticleMetricsViewSet(
@@ -33,12 +36,21 @@ class ArticleMetricsViewSet(
         metric = self.get_queryset().filter(
             article=article
         ).aggregate(
-            bias=Avg("bias_percent"),
-            fact=Avg("fact_percent"),
-            fake=Avg("fake_percent"),
+            bias=Avg("bias"),
         )
 
         return ArticleMetric(**metric)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    @detail_route(methods=["get"])
+    def user(self, request, article):
+        user = get_object_or_404(Profile, pk=article).user
+
+        serializer = ArticleReactionSerializer(
+            user.articlereaction_set,
+            many=True
+        )
+
+        return Response(serializer.data)

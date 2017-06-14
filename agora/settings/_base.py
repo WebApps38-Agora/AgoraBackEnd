@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'topics',
     'metrics',
     'facts',
+    'user_profile',
+    'notifications',
     'discussions',
 ]
 

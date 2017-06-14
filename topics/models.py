@@ -62,7 +62,7 @@ class Source(models.Model):
 
 class Article(models.Model):
     headline = models.CharField(max_length=140)
-    description = models.CharField(max_length=1000, blank=True)
+    description = models.CharField(max_length=1000, blank=True, null=True)
     content = models.TextField()
     content_len = models.PositiveIntegerField()
     url = models.URLField(max_length=500)
