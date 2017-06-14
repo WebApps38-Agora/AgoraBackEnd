@@ -21,4 +21,9 @@ class ProfileSerializer(serializers.ModelSerializer):
             "town",
             "country",
         )
-        extra_kwargs = {"user": {"write_only": True}}
+        extra_kwargs = {
+            "user": {
+                "write_only": True,
+                "required": False,
+            },
+        }
