@@ -1,5 +1,6 @@
-from rest_framework import mixins, permissions, viewsets
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from user_profile.models import Profile
@@ -20,7 +21,6 @@ class ProfilePermission(permissions.IsAuthenticated):
 
 class ProfileViewSet(mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
-                     mixins.UpdateModelMixin,
                      viewsets.GenericViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -33,3 +33,14 @@ class ProfileViewSet(mixins.CreateModelMixin,
     def list(self, request):
         serializer = self.get_serializer(request.user.profile)
         return Response(serializer.data)
+
+    @list_route(methods=["put"])
+    def update_own_profile(self, request):
+        serializer = self.get_serializer(
+            request.user.profile,
+            data=request.data
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
