@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 from topics.models import Article, Source, Topic
 from facts.serializers import FactSerializer
-
+from discussions.serializers import CommentSerializer
 
 class SourceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -71,6 +71,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
 class NestedTopicSerializer(TopicSerializer):
     article_set = ArticleSerializer(many=True)
     fact_set = FactSerializer(many=True)
+    comment_set = CommentSerializer(many=True)
 
     class Meta(TopicSerializer.Meta):
-        fields = TopicSerializer.Meta.fields + ("article_set", "fact_set")
+        fields = TopicSerializer.Meta.fields + ("article_set", "fact_set", "comment_set")

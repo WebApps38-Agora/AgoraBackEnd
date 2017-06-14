@@ -4,7 +4,7 @@ from discussions.models import Comment
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     # TODO: remove next line when user API implemented
-    owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
 
     class Meta:
         model = Comment
@@ -14,3 +14,4 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
             "parent_comment",
             "content",
         )
+        extra_kwargs = {"owner": {"write_only": True}}

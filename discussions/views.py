@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from rest_framework import viewsets
 
 from discussions.models import Comment
@@ -17,3 +15,6 @@ class CommentViewSet(viewsets.ModelViewSet):
            return Comment.objects.filter(topic__id=self.kwargs['topic_id'])
         else:
            return Comment.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
