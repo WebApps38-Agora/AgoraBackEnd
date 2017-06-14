@@ -25,9 +25,7 @@ class ArticleReactionSerializerTest(TestCase):
     def test_cant_react_to_article_twice(self):
         data = {
             "owner": self.u.id,
-            "article": reverse(
-                'article-detail', args=[self.a.id]
-            ),
+            "article": self.a.id,
             "bias_percent": 33.33,
             "fact_percent": 33.33,
             "fake_percent": 33.34,
@@ -43,9 +41,7 @@ class ArticleReactionSerializerTest(TestCase):
     def test_sum_of_percent_has_to_add_up_to_100(self):
         data = {
             "owner": self.u.id,
-            "article": reverse(
-                'article-detail', args=[self.a.id]
-            ),
+            "article": self.a.id,
             "bias_percent": 10.33,
             "fact_percent": 33.33,
             "fake_percent": 33.34,
