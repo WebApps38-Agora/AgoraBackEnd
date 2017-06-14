@@ -33,9 +33,7 @@ class ArticleMetricsViewSet(
         metric = self.get_queryset().filter(
             article=article
         ).aggregate(
-            bias=Avg("bias_percent"),
-            fact=Avg("fact_percent"),
-            fake=Avg("fake_percent"),
+            bias=Avg("bias"),
         )
 
         return ArticleMetric(**metric)
