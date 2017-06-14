@@ -1,10 +1,21 @@
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, permissions, viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from user_profile.models import Profile
 from user_profile.serializers import ProfileSerializer
+
+
+class ProfilePermission(permissions.IsAuthenticated):
+    """
+    Only logged in user can see own profile
+    """
+    message = "You need to be logged in to look at your profile"
+
+    def has_permission(self, request, view):
+        if view.action == "retrieve":
+            return True
+        return super().has_permission(request, view)
 
 
 class ProfileViewSet(mixins.CreateModelMixin,
@@ -14,11 +25,11 @@ class ProfileViewSet(mixins.CreateModelMixin,
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     authentication_classes = (TokenAuthentication,)
+    permission_classes = (ProfilePermission,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    @list_route()
-    def current_user_profile(self, request):
+    def list(self, request):
         serializer = self.get_serializer(request.user.profile)
         return Response(serializer.data)
