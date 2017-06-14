@@ -28,7 +28,7 @@ class ReactionSerializer(serializers.HyperlinkedModelSerializer):
 
 class FactSerializer(serializers.HyperlinkedModelSerializer):
     # TODO: remove next line when user API implemented
-    owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
 
     class Meta:
         model = Fact
