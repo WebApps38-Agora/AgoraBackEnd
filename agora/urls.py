@@ -1,10 +1,11 @@
 from django.conf.urls import url, include
+from django.contrib import admin
 from rest_framework import routers
 
+from facts import views as fact_views
 from metrics import views as metric_views
 from topics import views as topic_views
-from facts import views as fact_views
-from django.contrib import admin
+from user_profile import views as profile_views
 
 router = routers.DefaultRouter()
 router.register(r'articles', topic_views.ArticleViewSet)
@@ -15,6 +16,7 @@ router.register(
 )
 router.register(r'facts', fact_views.FactViewSet)
 router.register(r'fact_reactions', fact_views.FactReactionViewSet)
+router.register(r'profiles', profile_views.ProfileViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

@@ -1,15 +1,17 @@
 from math import isclose
 
-from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from metrics.models import ArticleReaction
 
 
-class ArticleReactionSerializer(serializers.HyperlinkedModelSerializer):
-    # TODO: remove next line when user API implemented
-    owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+class ArticleReactionSerializer(serializers.ModelSerializer):
+    owner_profile = serializers.SlugRelatedField(
+        source="owner",
+        read_only=True,
+        slug_field="profile",
+    )
 
     def validate(self, data):
         """
@@ -31,11 +33,17 @@ class ArticleReactionSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "article",
             "owner",
+            "owner_profile",
             "bias_percent",
             "fact_percent",
             "fake_percent",
         )
-        extra_kwargs = {"owner": {"write_only": True}}
+        extra_kwargs = {
+            "owner": {
+                "write_only": True,
+                "required": False,
+            }
+        }
         validators = [
             UniqueTogetherValidator(
                 queryset=ArticleReaction.objects.all(),
