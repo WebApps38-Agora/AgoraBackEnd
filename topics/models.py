@@ -38,7 +38,12 @@ class Topic(NotifySubscribersModel):
 
         return (1 + math.exp(0.01 * 24 * 7) *
                 share_of_views - math.exp(0.01 * age) +
-                self.article_set.count())
+                self.source_count)
+
+    @property
+    def source_count(self):
+        return len(set([article.source for article in self.article_set.all()]))
+
 
     @property
     def article_images(self):

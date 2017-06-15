@@ -1,6 +1,6 @@
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 
 from user_profile.models import Profile
@@ -20,6 +20,7 @@ class ProfilePermission(permissions.IsAuthenticated):
 
 
 class ProfileViewSet(mixins.RetrieveModelMixin,
+                     mixins.UpdateModelMixin,
                      viewsets.GenericViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -30,7 +31,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
         serializer = self.get_serializer(request.user.profile)
         return Response(serializer.data)
 
-    @list_route(methods=["put"])
+    @detail_route(methods=["put"])
     def update_own_profile(self, request):
         serializer = self.get_serializer(
             request.user.profile,
