@@ -7,9 +7,9 @@ from metrics.models import ArticleReaction
 
 class ArticleReactionSerializer(serializers.ModelSerializer):
     owner_profile = serializers.SlugRelatedField(
-        source="owner",
+        source="owner.profile",
         read_only=True,
-        slug_field="profile",
+        slug_field="id",
     )
 
     def validate(self, data):
