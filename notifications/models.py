@@ -3,18 +3,50 @@ from django.db import models
 
 
 class Notification(models.Model):
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, through="NotifiedUsers")
     timestamp = models.DateTimeField(auto_now=True)
-    link = models.URLField(max_length=500)
     content = models.CharField(max_length=140)
+
+    notification_type = models.CharField(max_length=20)
+    relevant_id = models.IntegerField()
+
+
+class NotifiedUsers(models.Model):
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     seen = models.BooleanField(default=False)
 
 
-def notify_users(users, link, content):
+class NotifySubscribersModel(models.Model):
     """
-    Given a list of users, notify all of them
+    Mixin for models that can take have subscribers and notify them
     """
-    notification = Notification(link=link, content=content)
-    notification.save()
+    subscribers = models.ManyToManyField(
+        User,
+        related_name="%(class)s_subscriber",
+    )
 
-    notification.users.add(*users)
+    def notify_all(
+            self, notification_type, relevant_id, content, exclude=None):
+        """
+        Notify all subscribers
+        """
+        exclude = exclude or []
+        notification = Notification(
+            notification_type=notification_type,
+            relevant_id=relevant_id,
+            content=content
+        )
+        notification.save()
+
+        to_notify = self.subscribers.all()
+
+        for to_exclude in exclude:
+            to_notify = to_notify.exclude(id=to_exclude.id)
+
+        for user in to_notify:
+            notified = NotifiedUsers(notification=notification, user=user)
+            notified.save()
+
+    class Meta:
+        abstract = True

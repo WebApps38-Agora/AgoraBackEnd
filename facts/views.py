@@ -22,7 +22,12 @@ class FactViewSet(viewsets.ModelViewSet):
             return Fact.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        fact = serializer.save(owner=self.request.user)
+        fact.topic.notify_all(
+            "new_fact",
+            fact.topic.id,
+            "New fact in {}".format(fact.topic.title),
+        )
 
     @detail_route()
     def user(self, request, pk):
