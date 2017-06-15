@@ -2,8 +2,10 @@ from django.db import models
 from django.utils import timezone
 import math
 
+from notifications.models import NotifySubscribersModel
 
-class Topic(models.Model):
+
+class Topic(NotifySubscribersModel):
     """
     Definition of a news Topic.
     """
