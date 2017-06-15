@@ -5,18 +5,18 @@ from facts.models import FactReaction, Fact
 
 
 class ReactionSerializer(serializers.ModelSerializer):
-    owner_profile = serializers.SlugRelatedField(
-        source="owner",
-        read_only=True,
-        slug_field="profile",
-    )
+    # owner_profile = serializers.SlugRelatedField(
+    #     source="owner",
+    #     read_only=True,
+    #     slug_field="profile",
+    # )
 
     class Meta:
         model = FactReaction
         fields = (
             "fact",
             "owner",
-            "owner_profile",
+            # "owner_profile",
             "is_upvote",
         )
         extra_kwargs = {
@@ -34,18 +34,18 @@ class ReactionSerializer(serializers.ModelSerializer):
 
 
 class FactSerializer(serializers.ModelSerializer):
-    owner_profile = serializers.SlugRelatedField(
-        source="owner",
-        read_only=True,
-        slug_field="profile",
-    )
+    # owner_profile = serializers.SlugRelatedField(
+    #     source="owner",
+    #     read_only=True,
+    #     slug_field="profile",
+    # )
 
     class Meta:
         model = Fact
         fields = (
             "topic",
             "owner",
-            "owner_profile",
+            #"owner_profile",
             "content",
             "factreaction_set",
             "score",
