@@ -21,7 +21,10 @@ class NotifySubscribersModel(models.Model):
     """
     Mixin for models that can take have subscribers and notify them
     """
-    subscribers = models.ManyToManyField(User, related_name="subscriber")
+    subscribers = models.ManyToManyField(
+        User,
+        related_name="%(class)s_subscriber",
+    )
 
     def notify_all(
             self, notification_type, relevant_id, content, exclude=None):
