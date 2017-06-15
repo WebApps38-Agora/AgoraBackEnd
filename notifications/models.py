@@ -44,7 +44,9 @@ class NotifySubscribersModel(models.Model):
         for to_exclude in exclude:
             to_notify = to_notify.exclude(id=to_exclude.id)
 
-        notification.users.add(*to_notify)
+        for user in to_notify:
+            notified = NotifiedUsers(notification=notification, user=user)
+            notified.save()
 
     class Meta:
         abstract = True
