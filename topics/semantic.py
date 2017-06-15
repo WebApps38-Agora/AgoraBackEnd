@@ -6,6 +6,7 @@ SIMILARITY_THRESHOLD = 0.25
 
 logging.getLogger("gensim").setLevel(logging.ERROR)
 
+
 class ArticleCorpus(corpora.TextCorpus):
     def get_texts(self):
         for text in self.input:
@@ -62,14 +63,14 @@ def group_articles_using_similarities(
     # as an article is similar to itself with a value of 1. The first index
     # matches the index of the new_articles array, and the second matches the
     # articles array.
+    updated_topics = set()
+
     for article_id, sims in enumerate(similarity_table):
         sorted_sims = sorted(enumerate(sims), key=lambda item: -item[1])
 
         # Take the second-highest similarity (which will be the most
         # similar headline other than the same article itself)
         similarity = sorted_sims[1]
-
-
 
         # Extract value and ID as a result of enumerate()
         similar_article_id = similarity[0]
@@ -100,6 +101,15 @@ def group_articles_using_similarities(
 
         article.save()
         similar_article.save()
+
+        updated_topics.add(article.topic)
+
+    for topic in updated_topics:
+        topic.notify_all(
+            "new_article",
+            topic.id,
+            "New articles in {}".format(topic.title)
+        )
 
 
 def to_lsi_vector(corpus, lsi, tokenized_headline):
