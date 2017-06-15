@@ -31,7 +31,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
         serializer = self.get_serializer(request.user.profile)
         return Response(serializer.data)
 
-    @detail_route(methods=["put"])
+    @list_route(methods=["put"])
     def update_own_profile(self, request):
         serializer = self.get_serializer(
             request.user.profile,
