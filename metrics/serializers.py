@@ -37,12 +37,12 @@ class ArticleReactionSerializer(serializers.ModelSerializer):
                 "required": False,
             }
         }
-        validators = [
-            UniqueTogetherValidator(
-                queryset=ArticleReaction.objects.all(),
-                fields=("owner", "article")
-            )
-        ]
+        # validators = [
+        #     UniqueTogetherValidator(
+        #         queryset=ArticleReaction.objects.all(),
+        #         fields=("owner", "article")
+        #     )
+        # ]
 
 
 class ArticleMetric():
