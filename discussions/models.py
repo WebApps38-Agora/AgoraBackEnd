@@ -1,11 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from notifications.models import NotifySubscribersModelMixin
+from notifications.models import NotifySubscribersModel
 from topics.models import Topic
 
 
-class Comment(NotifySubscribersModelMixin, models.Model):
+class Comment(NotifySubscribersModel):
     topic = models.ForeignKey(Topic)
     owner = models.ForeignKey(User)
     parent_comment = models.ForeignKey('self', null=True, blank=True)

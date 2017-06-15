@@ -12,11 +12,11 @@ class Notification(models.Model):
     relevant_id = models.IntegerField()
 
 
-class NotifySubscribersModelMixin():
+class NotifySubscribersModel(models.Model):
     """
     Mixin for models that can take have subscribers and notify them
     """
-    subscribers = models.ManyToManyField(User)
+    subscribers = models.ManyToManyField(User, related_name="subscriber")
 
     def notify_all(
             self, notification_type, relevant_id, content, exclude=None):
@@ -31,6 +31,12 @@ class NotifySubscribersModelMixin():
         )
         notification.save()
 
-        notification.users.add(
-            *self.subscribers.all().exclude(user__in=exclude)
-        )
+        to_notify = self.subscribers.all()
+
+        for to_exclude in exclude:
+            to_notify = to_notify.exclude(id=to_exclude.id)
+
+        notification.users.add(*to_notify)
+
+    class Meta:
+        abstract = True
