@@ -69,7 +69,7 @@ class Article(models.Model):
     content = models.TextField()
     content_len = models.PositiveIntegerField()
     url = models.URLField(max_length=500)
-    url_image = models.URLField(max_length=500)
+    url_image = models.URLField(max_length=500, blank=True, null=True)
     published_at = models.DateTimeField(null=True)
 
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True)
