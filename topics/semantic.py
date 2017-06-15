@@ -1,8 +1,10 @@
 from gensim import corpora, models, similarities
 from topics.models import Article, Topic
+import logging
 
 SIMILARITY_THRESHOLD = 0.25
 
+logging.getLogger("gensim").setLevel(logging.ERROR)
 
 class ArticleCorpus(corpora.TextCorpus):
     def get_texts(self):
@@ -67,6 +69,8 @@ def group_articles_using_similarities(
         # similar headline other than the same article itself)
         similarity = sorted_sims[1]
 
+
+
         # Extract value and ID as a result of enumerate()
         similar_article_id = similarity[0]
         sim_value = similarity[1]
@@ -74,6 +78,10 @@ def group_articles_using_similarities(
         # Get actual article objects pointed to by the IDs
         article = new_articles[article_id]
         similar_article = articles[similar_article_id]
+
+        # print(str(article))
+        # print(str(similar_article))
+        # print("Similarity:" + str(similarity))
 
         if sim_value > SIMILARITY_THRESHOLD:
             # Group the two together under the same, potentially new topic

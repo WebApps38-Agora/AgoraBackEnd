@@ -35,7 +35,8 @@ class Topic(models.Model):
         share_of_views = self.views / total_views if total_views > 0 else 0
 
         return (1 + math.exp(0.01 * 24 * 7) *
-                share_of_views - math.exp(0.01 * age))
+                share_of_views - math.exp(0.01 * age) +
+                self.article_set.count())
 
     @property
     def article_images(self):
