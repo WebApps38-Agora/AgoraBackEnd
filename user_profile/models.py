@@ -10,6 +10,19 @@ def profile_pic_path(instance, filename):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    first_name = models.CharField(max_length=20, null=True)
+    last_name = models.CharField(max_length=20, null=True)
+
+    MALE = "male"
+    FEMALE = "female"
+
+    GENDER_CHOICES = (
+        (MALE, "Male"),
+        (FEMALE, "Female"),
+    )
+
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True)
+
     political_x = models.IntegerField(default=0)
     political_y = models.IntegerField(default=0)
     profession = models.CharField(max_length=30, null=True)
