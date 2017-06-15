@@ -3,13 +3,18 @@ from django.db import models
 
 
 class Notification(models.Model):
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, through="NotifiedUsers")
     timestamp = models.DateTimeField(auto_now=True)
     content = models.CharField(max_length=140)
-    seen = models.BooleanField(default=False)
 
     notification_type = models.CharField(max_length=20)
     relevant_id = models.IntegerField()
+
+
+class NotifiedUsers(models.Model):
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    seen = models.BooleanField(default=False)
 
 
 class NotifySubscribersModel(models.Model):
