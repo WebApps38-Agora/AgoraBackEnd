@@ -4,14 +4,15 @@ from allauth.socialaccount.providers.facebook.views import (
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from rest_auth.registration.views import SocialLoginView
-from rest_framework import permissions, viewsets
+from rest_framework import mixins, permissions, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 
-from topics.models import Article, Source, Topic
+from topics.models import Article, Source, Tag, Topic
 from topics.serializers import (ArticleSerializer, NestedSourceSerializer,
-                                NestedTopicSerializer, TopicSerializer)
+                                NestedTopicSerializer, NestedTagSerializer,
+                                TopicSerializer)
 
 
 class TopicsAppPermission(permissions.BasePermission):
@@ -83,6 +84,31 @@ class TopicViewSet(viewsets.ModelViewSet):
 
         if request.user.is_authenticated:
             topic.subscribers.remove(request.user)
+
+        return Response("Success")
+
+
+class TagViewSet(mixins.ListModelMixin,
+                 mixins.RetrieveModelMixin,
+                 viewsets.GenericViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = NestedTagSerializer
+
+    @detail_route()
+    def subscribe(self, request, pk):
+        tag = get_object_or_404(Tag, pk=pk)
+
+        if request.user.is_authenticated:
+            tag.subscribers.add(request.user)
+
+        return Response("Success")
+
+    @detail_route()
+    def unsubscribe(self, request, pk):
+        tag = get_object_or_404(Tag, pk=pk)
+
+        if request.user.is_authenticated:
+            tag.subscribers.remove(request.user)
 
         return Response("Success")
 

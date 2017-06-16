@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
-from topics.models import Article, Source, Topic
+from topics.models import Article, Source, Tag, Topic
 from facts.serializers import FactSerializer
 from discussions.serializers import CommentSerializer
+
 
 class SourceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -48,6 +49,26 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = (
+            "id",
+            "name",
+        )
+
+
+class NestedTagSerializer(TagSerializer):
+    topics = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field="id",
+        many=True,
+    )
+
+    class Meta(TagSerializer.Meta):
+        fields = TagSerializer.Meta.fields + ("topics",)
+
+
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
     images = serializers.SlugRelatedField(
         source="article_set",
@@ -55,6 +76,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True,
         slug_field="url_image",
     )
+    tag_set = TagSerializer(many=True)
 
     class Meta:
         model = Topic
@@ -62,6 +84,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
             "id",
             "title",
             "published_at",
+            "tag_set",
             "images",
             "views",
             "ranking",
@@ -74,4 +97,5 @@ class NestedTopicSerializer(TopicSerializer):
     comment_set = CommentSerializer(many=True)
 
     class Meta(TopicSerializer.Meta):
-        fields = TopicSerializer.Meta.fields + ("article_set", "fact_set", "comment_set")
+        fields = TopicSerializer.Meta.fields + (
+            "article_set", "fact_set", "comment_set")

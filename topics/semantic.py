@@ -1,8 +1,14 @@
-from gensim import corpora, models, similarities
-from topics.models import Article, Topic
 import logging
+import os
+import textrazor
+
+from gensim import corpora, models, similarities
+
+from topics.models import Article, Tag, Topic
 
 SIMILARITY_THRESHOLD = 0.25
+textrazor.api_key = os.environ["TEXT_RAZOR_KEY"]
+TAG_THRESHOLD = 0.70
 
 logging.getLogger("gensim").setLevel(logging.ERROR)
 
@@ -104,12 +110,52 @@ def group_articles_using_similarities(
 
         updated_topics.add(article.topic)
 
+    post_topic_creation(updated_topics)
+
+
+def post_topic_creation(updated_topics):
     for topic in updated_topics:
         topic.notify_all(
             "new_article",
             topic.id,
-            "New articles in {}".format(topic.title)
+            "New articles in {}".format(
+                topic.title[:100] + "..."
+                if len(topic.title) > 100
+                else topic.title
+            )
         )
+
+        headlines = [a.headline for a in topic.article_set.all()]
+        concat_headline = " ".join(headlines)
+
+        tags = get_topic_tags(concat_headline)
+        updated_tags = []
+
+        for tag_text in tags:
+            tag, _ = Tag.objects.get_or_create(name=tag_text)
+            updated_tags.append(tag)
+            tag.topics.add(topic)
+
+        for tag in updated_tags:
+            tag.notify_all(
+                "new_topic_in_tag",
+                tag.id,
+                "New topics in {}".format(tag.name)
+            )
+
+
+def get_topic_tags(topic_text):
+    client = textrazor.TextRazor(extractors=["topics"])
+    try:
+        response = client.analyze(topic_text)
+    except textrazor.TextRazorAnalysisException:
+        return []
+
+    topics = [
+        topic for topic in response.topics() if topic.score > TAG_THRESHOLD
+    ]
+
+    return [topic.label for topic in topics]
 
 
 def to_lsi_vector(corpus, lsi, tokenized_headline):
