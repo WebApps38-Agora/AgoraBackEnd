@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from topics.models import Article, Source, Tag, Topic
 from topics.serializers import (ArticleSerializer, NestedSourceSerializer,
                                 NestedTopicSerializer, NestedTagSerializer,
-                                TopicSerializer)
+                                TagSerializer, TopicSerializer)
 
 
 class TopicsAppPermission(permissions.BasePermission):
@@ -114,4 +114,4 @@ class TagViewSet(mixins.ListModelMixin,
 
 
 class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter
+    dapter_class = FacebookOAuth2Adapter

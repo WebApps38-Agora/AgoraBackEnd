@@ -58,17 +58,6 @@ class TagSerializer(serializers.ModelSerializer):
         )
 
 
-class NestedTagSerializer(TagSerializer):
-    topics = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field="id",
-        many=True,
-    )
-
-    class Meta(TagSerializer.Meta):
-        fields = TagSerializer.Meta.fields + ("topics",)
-
-
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
     images = serializers.SlugRelatedField(
         source="article_set",
@@ -76,7 +65,6 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True,
         slug_field="url_image",
     )
-    tag_set = TagSerializer(many=True)
 
     class Meta:
         model = Topic
@@ -84,18 +72,28 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
             "id",
             "title",
             "published_at",
-            "tag_set",
             "images",
             "views",
             "ranking",
         )
 
 
+class NestedTagSerializer(TagSerializer):
+    topics = TopicSerializer(
+        many=True,
+    )
+
+    class Meta(TagSerializer.Meta):
+        fields = TagSerializer.Meta.fields + ("topics",)
+
+
 class NestedTopicSerializer(TopicSerializer):
     article_set = ArticleSerializer(many=True)
     fact_set = FactSerializer(many=True)
     comment_set = CommentSerializer(many=True)
+    tag_set = NestedTagSerializer(many=True)
 
     class Meta(TopicSerializer.Meta):
         fields = TopicSerializer.Meta.fields + (
-            "article_set", "fact_set", "comment_set")
+            "article_set", "fact_set", "comment_set", "tag_set"
+        )
