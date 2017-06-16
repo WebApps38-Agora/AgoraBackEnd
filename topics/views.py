@@ -92,7 +92,11 @@ class TagViewSet(mixins.ListModelMixin,
                  mixins.RetrieveModelMixin,
                  viewsets.GenericViewSet):
     queryset = Tag.objects.all()
-    serializer_class = NestedTagSerializer
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return NestedTagSerializer
+        return TagSerializer
 
     @detail_route()
     def subscribe(self, request, pk):

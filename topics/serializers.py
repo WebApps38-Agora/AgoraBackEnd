@@ -58,7 +58,7 @@ class TagSerializer(serializers.ModelSerializer):
         )
 
 
-class TopicSerializer(serializers.HyperlinkedModelSerializer):
+class TopicSerializer(serializers.ModelSerializer):
     images = serializers.SlugRelatedField(
         source="article_set",
         many=True,
@@ -73,6 +73,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
             "title",
             "published_at",
             "images",
+            "tag_set",
             "views",
             "ranking",
         )
