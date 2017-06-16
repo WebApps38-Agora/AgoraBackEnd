@@ -67,6 +67,11 @@ class Topic(NotifySubscribersModel):
         ordering = ["-ranking"]
 
 
+class Tag(NotifySubscribersModel):
+    name = models.TextField(max_length=20)
+    topics = models.ManyToManyField(Topic)
+
+
 class Source(models.Model):
     """
     A news outlet. Can be used to collect metrics and group articles.
