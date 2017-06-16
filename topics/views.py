@@ -7,6 +7,7 @@ from rest_auth.registration.views import SocialLoginView
 from rest_framework import mixins, permissions, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 
 from topics.models import Article, Source, Tag, Topic
@@ -88,10 +89,15 @@ class TopicViewSet(viewsets.ModelViewSet):
         return Response("Success")
 
 
+class NoPagination(PageNumberPagination):
+    page_size = 10000
+
+
 class TagViewSet(mixins.ListModelMixin,
                  mixins.RetrieveModelMixin,
                  viewsets.GenericViewSet):
     queryset = Tag.objects.all()
+    pagination_class = NoPagination
 
     def get_serializer_class(self):
         if self.action == "retrieve":

@@ -22,20 +22,6 @@ class ArticleReactionSerializerTest(TestCase):
         self.u = User(username="test")
         self.u.save()
 
-    def test_cant_react_to_article_twice(self):
-        data = {
-            "owner": self.u.id,
-            "article": self.a.id,
-            "bias": 33.33,
-        }
-
-        serializer = ArticleReactionSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        serializer = ArticleReactionSerializer(data=data)
-        self.assertFalse(serializer.is_valid())
-
     def test_bias_percentage_has_to_be_valid(self):
         data = {
             "owner": self.u.id,

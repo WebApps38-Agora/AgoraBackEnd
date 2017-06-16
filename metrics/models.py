@@ -21,5 +21,5 @@ class ArticleReaction(Reaction):
     """
     bias = models.FloatField()
 
-    class Meta:
-        unique_together = ("owner", "article")
+    # class Meta:
+    #     unique_together = ("owner", "article")

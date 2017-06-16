@@ -14,6 +14,7 @@ class CommentSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {
             "owner": {
+                "required": False,
                 "write_only": True
             }
         }
