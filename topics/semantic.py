@@ -152,7 +152,7 @@ def get_topic_tags(topic_text):
         return []
 
     topics = [
-        topic for topic in response.topics() if topic.score > TAG_THRESHOLD
+        topic for topic in response.topics() if topic.score >= TAG_THRESHOLD
     ]
 
     return [topic.label for topic in topics]
