@@ -57,14 +57,6 @@ class TopicViewSet(viewsets.ModelViewSet):
         else:
             return NestedTopicSerializer
 
-    def get_queryset(self):
-        if self.action == 'list':
-            return sorted(
-                Topic.objects.all(), key=lambda t: t.ranking, reverse=True
-            )
-        else:
-            return Topic.objects.all()
-
     def get_object(self):
         obj = super().get_object()
 

@@ -11,14 +11,15 @@ class Topic(NotifySubscribersModel):
     """
     published_at = models.DateTimeField(auto_now_add=True, blank=True)
     views = models.PositiveIntegerField(default=0)
+    ranking = models.FloatField(default=0)
 
     @property
     def title(self):
         return (self.article_set.all()[0].headline
                 if self.article_set.count() > 0 else '')
 
-    @property
-    def ranking(self):
+    @staticmethod
+    def update_rankings():
         '''Returns a number which ranks topics based on their age and number of
         views. A higher share of views (relative to the views of all topics)
         positively affects the ranking of the topic while an old age
@@ -32,18 +33,24 @@ class Topic(NotifySubscribersModel):
         A scaling constant of 0.01 in the exponential is used to stretch the
         age falloff. Age is counted in hours.'''
 
-        age = (timezone.now() - self.published_at).total_seconds() / 60 / 60
         total_views = Topic.total_topic_views()
-        share_of_views = self.views / total_views if total_views > 0 else 0
 
-        return (1 + math.exp(0.01 * 24 * 7) *
-                share_of_views - math.exp(0.01 * age) +
-                self.source_count)
+        for topic in Topic.objects.all():
+            age = (
+                timezone.now() - topic.published_at
+            ).total_seconds() / 60 / 60
+            share_of_views = (
+                topic.views / total_views
+                if total_views > 0 else 0
+            )
+            topic.ranking = (1 + math.exp(0.01 * 24 * 7) *
+                             share_of_views - math.exp(0.01 * age) +
+                             topic.source_count)
+            topic.save()
 
     @property
     def source_count(self):
         return len(set([article.source for article in self.article_set.all()]))
-
 
     @property
     def article_images(self):
@@ -55,6 +62,9 @@ class Topic(NotifySubscribersModel):
     @staticmethod
     def total_topic_views():
         return sum(topic.views for topic in Topic.objects.all())
+
+    class Meta:
+        ordering = ["-ranking"]
 
 
 class Source(models.Model):

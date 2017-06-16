@@ -8,6 +8,7 @@ django.setup()
 
 from topics import newsapi
 from topics import semantic
+from topics.models import Topic
 
 sources = [
     'bbc-news',
@@ -31,3 +32,5 @@ for source in sources:
     new_articles = newsapi.update_article_database([source])
     for article in new_articles:
         semantic.create_topics([article])
+
+Topic.update_rankings()
