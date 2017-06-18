@@ -4,11 +4,13 @@ from notifications.models import Notification
 
 
 class NotificationSerializer(serializers.ModelSerializer):
+    seen = serializers.BooleanField()
+    
     class Meta:
         model = Notification
         fields = (
             "timestamp",
             "content",
-            "link",
+            "relevant_id",
             "seen",
         )
