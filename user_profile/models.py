@@ -31,6 +31,22 @@ class Profile(models.Model):
 
     profile_picture = models.URLField(max_length=500, null=True)
 
+    @property
+    def political_stance(self):
+        x = "Center"
+        if self.political_x < -1:
+            x = "Left-Wing"
+        elif self.political_x > 1:
+            x = "Right-Wing"
+
+        y = ""
+        if self.political_y < -1:
+            y = " Liberatarian"
+        elif self.political_y > 1:
+            y = " Authoritarian"
+
+        return x + y
+
 
 @receiver(
     models.signals.post_save,

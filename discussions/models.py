@@ -12,3 +12,5 @@ class Comment(NotifySubscribersModel):
 
     content = models.CharField(max_length=2000)
     upvotes = models.PositiveIntegerField(default=0)
+
+    published_at = models.DateTimeField(auto_now_add=True, blank=True)

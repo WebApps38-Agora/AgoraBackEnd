@@ -22,7 +22,6 @@ class NestedSourceSerializer(SourceSerializer):
 
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
-    metrics = serializers.SerializerMethodField()
     source = SourceSerializer()
 
     class Meta:
@@ -35,7 +34,6 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
             "url",
             "url_image",
             "published_at",
-            "metrics",
 
             "source",
             "topic",

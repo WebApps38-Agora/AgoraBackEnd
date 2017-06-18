@@ -8,7 +8,7 @@ from topics.models import Article, Tag, Topic
 
 SIMILARITY_THRESHOLD = 0.25
 textrazor.api_key = os.environ["TEXT_RAZOR_KEY"]
-TAG_THRESHOLD = 0.90
+TAG_THRESHOLD = 1.0
 
 logging.getLogger("gensim").setLevel(logging.ERROR)
 

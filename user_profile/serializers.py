@@ -22,6 +22,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "profile_picture",
             "political_x",
             "political_y",
+            "political_stance",
             "profession",
             "town",
             "country",

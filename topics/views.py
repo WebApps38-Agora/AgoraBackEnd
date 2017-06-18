@@ -124,4 +124,4 @@ class TagViewSet(mixins.ListModelMixin,
 
 
 class FacebookLogin(SocialLoginView):
-    dapter_class = FacebookOAuth2Adapter
+    adapter_class = FacebookOAuth2Adapter

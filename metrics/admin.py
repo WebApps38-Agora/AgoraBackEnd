@@ -1,3 +1,4 @@
 from django.contrib import admin
+from metrics.models import ArticleReaction
 
-# Register your models here.
+admin.site.register(ArticleReaction)
