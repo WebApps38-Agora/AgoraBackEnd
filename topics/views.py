@@ -5,7 +5,7 @@ from django.db.models import F
 from django.shortcuts import get_object_or_404
 from rest_auth.registration.views import SocialLoginView
 from rest_framework import mixins, permissions, viewsets
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
@@ -87,6 +87,18 @@ class TopicViewSet(viewsets.ModelViewSet):
             topic.subscribers.remove(request.user)
 
         return Response("Success")
+
+    @list_route()
+    def latest(self, request, *args, **kwargs):
+        queryset = self.get_queryset().order_by("-published_at")
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class NoPagination(PageNumberPagination):
