@@ -69,7 +69,6 @@ def group_articles_using_similarities(
     # as an article is similar to itself with a value of 1. The first index
     # matches the index of the new_articles array, and the second matches the
     # articles array.
-    updated_topics = set()
 
     for article_id, sims in enumerate(similarity_table):
         sorted_sims = sorted(enumerate(sims), key=lambda item: -item[1])
@@ -108,6 +107,9 @@ def group_articles_using_similarities(
         article.save()
         similar_article.save()
 
+    updated_topics = set()
+
+    for article in new_articles:
         updated_topics.add(article.topic)
 
     post_topic_creation(updated_topics)
