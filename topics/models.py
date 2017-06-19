@@ -70,6 +70,10 @@ class Topic(NotifySubscribersModel):
 class Tag(NotifySubscribersModel):
     name = models.TextField(max_length=20)
     topics = models.ManyToManyField(Topic)
+    topic_count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["-topic_count"]
 
 
 class Source(models.Model):

@@ -135,6 +135,8 @@ def post_topic_creation(updated_topics):
             tag, _ = Tag.objects.get_or_create(name=tag_text)
             updated_tags.append(tag)
             tag.topics.add(topic)
+            tag.topic_count += 1
+            tag.save()
 
         for tag in updated_tags:
             tag.notify_all(
