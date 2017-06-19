@@ -99,9 +99,22 @@ class Article(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True)
     source = models.ForeignKey(Source, on_delete=models.CASCADE, null=True)
 
+    bias = models.FloatField(default=-1)
+
     def save(self, *args, **kwargs):
         self.content_len = len(self.content)
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.headline
+
+    def update_bias(self, new_bias):
+        if self.bias < 0:
+            self.bias = new_bias
+        else:
+            self.bias = (self.bias + new_bias) / 2
+
+        self.save()
+
+    class Meta:
+        ordering = ["bias"]

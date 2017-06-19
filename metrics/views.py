@@ -33,16 +33,14 @@ class ArticleMetricsViewSet(
     def get_object(self):
         article_pk = self.kwargs[self.lookup_field]
         article = get_object_or_404(Article, pk=article_pk)
-        metric = self.get_queryset().filter(
-            article=article
-        ).aggregate(
-            bias=Avg("bias"),
-        )
 
-        return ArticleMetric(**metric)
+        bias = article.bias
+
+        return ArticleMetric(bias=bias)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        metric = serializer.save(owner=self.request.user)
+        metric.article.update_bias(metric.bias)
 
     @detail_route(methods=["get"])
     def user(self, request, article):

@@ -46,8 +46,8 @@ class ArticleReactionSerializer(serializers.ModelSerializer):
 
 
 class ArticleMetric():
-    def __init__(self, bias=None):
-        self.bias = bias or -1
+    def __init__(self, bias):
+        self.bias = bias
 
 
 class ArticleMetricsSerializer(serializers.Serializer):

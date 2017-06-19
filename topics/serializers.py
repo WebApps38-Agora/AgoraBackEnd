@@ -34,6 +34,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
             "url",
             "url_image",
             "published_at",
+            "bias",
 
             "source",
             "topic",
