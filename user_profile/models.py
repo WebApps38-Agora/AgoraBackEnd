@@ -41,7 +41,7 @@ class Profile(models.Model):
 
         y = ""
         if self.political_y < -1:
-            y = " Liberatarian"
+            y = " Libertarian"
         elif self.political_y > 1:
             y = " Authoritarian"
 
@@ -55,9 +55,9 @@ class Profile(models.Model):
             return "blue"
         if self.political_stance == "Right-Wing Authoritarian":
             return "red"
-        if self.political_stance == "Left-Wing Liberatarian":
+        if self.political_stance == "Left-Wing Libertarian":
             return "green"
-        if self.political_stance == "Right-Wing Liberatarian":
+        if self.political_stance == "Right-Wing Libertarian":
             return "purple"
 
 
