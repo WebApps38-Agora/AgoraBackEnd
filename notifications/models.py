@@ -16,6 +16,9 @@ class NotifiedUsers(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     seen = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ["seen"]
+
 
 class NotifySubscribersModel(models.Model):
     """
