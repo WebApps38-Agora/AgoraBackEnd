@@ -36,17 +36,22 @@ class NotifySubscribersModel(models.Model):
         Notify all subscribers
         """
         exclude = exclude or []
+
+        to_notify = self.subscribers.all()
+
+        for to_exclude in exclude:
+            to_notify = to_notify.exclude(id=to_exclude.id)
+
+        # If there's no one to notify, terminate
+        if to_notify.count() == 0:
+            return
+
         notification = Notification(
             notification_type=notification_type,
             relevant_id=relevant_id,
             content=content
         )
         notification.save()
-
-        to_notify = self.subscribers.all()
-
-        for to_exclude in exclude:
-            to_notify = to_notify.exclude(id=to_exclude.id)
 
         for user in to_notify:
             notified = NotifiedUsers(notification=notification, user=user)
