@@ -12,6 +12,7 @@ class Notification(models.Model):
 
 
 class NotifiedUsers(models.Model):
+    id_key = models.AutoField(primary_key=True)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     seen = models.BooleanField(default=False)
