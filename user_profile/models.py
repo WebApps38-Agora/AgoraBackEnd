@@ -56,9 +56,10 @@ class Profile(models.Model):
         if self.political_stance == "Right-Wing Authoritarian":
             return "red"
         if self.political_stance == "Left-Wing Liberatarian":
-            return "purple"
-        if self.political_stance == "Right-Wing Liberatarian":
             return "green"
+        if self.political_stance == "Right-Wing Liberatarian":
+            return "purple"
+
 
 @receiver(
     models.signals.post_save,
