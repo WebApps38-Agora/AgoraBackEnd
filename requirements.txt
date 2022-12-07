@@ -1,7 +1,7 @@
 appdirs==1.4.3
 boto==2.47.0
 bz2file==0.98
-certifi==2017.4.17
+certifi==2022.12.7
 chardet==3.0.3
 defusedxml==0.5.0
 Django==1.11.1
